@@ -1,6 +1,6 @@
-import React from "react";
-import { ScreenContainer } from "../styled/ScreenContainer";
-import styled from "styled-components";
+import React from 'react';
+import { ScreenContainer } from '../styled/ScreenContainer';
+import styled from 'styled-components';
 
 const Heading = styled.h1`
   font-size: 5vw;
@@ -17,7 +17,7 @@ const NotMobile = () => {
   return (
     <ScreenContainer>
       <Heading>Open on mobile device</Heading>
-      <Avaliability>The game is available only on mobile device</Avaliability>
+      <Avaliability>The game is available only on mobile devices</Avaliability>
     </ScreenContainer>
   );
 };
