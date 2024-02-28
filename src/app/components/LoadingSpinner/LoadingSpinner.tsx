@@ -16,13 +16,11 @@ const SpinnerContainer = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 100vh;
-  background-color: #61dafb;
 `;
 
 const Spinner = styled.div`
   border: 5px solid rgba(255, 255, 255, 0.2);
-  border-top: 5px solid #fff;
+  border-top: 5px solid #61dafb;
   border-radius: 50%;
   width: 50px;
   height: 50px;
