@@ -1,3 +1,8 @@
+@font-face {
+  font-family: 'Retro Land Mayhem';
+  src: url(../../public/font/retro-land-mayhem.ttf) format("truetype");
+}
+
 *,
 *::after,
 *::before {
@@ -5,6 +10,7 @@
 }
 
 body {
+  font-family: "Retro Land Mayhem", sans-serif;
   line-height: 1;
   padding: 0;
   margin: 0;
@@ -13,16 +19,14 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-image: radial-gradient(
-    circle at 37.72% -19.64%,
-    #e96ef3 0,
-    #c45bf4 16.67%,
-    #934af3 33.33%,
-    #443cf2 50%,
-    #0035f0 66.67%,
-    #0035ee 83.33%,
-    #0035eb 100%
-  );
+  background-image: radial-gradient(circle at 37.72% -19.64%,
+      #e96ef3 0,
+      #c45bf4 16.67%,
+      #934af3 33.33%,
+      #443cf2 50%,
+      #0035f0 66.67%,
+      #0035ee 83.33%,
+      #0035eb 100%);
 }
 
 img {

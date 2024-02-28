@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import checkIsMobileDevice from "../utils/isMobileDevice";
 import HomeScreen from "./components/HomeScreen/HomeScreen";
 import NotMobile from "./components/NotMobile/NotMobile";
-import LoadingSpinner from "./components/LoadingSpinner/LoadingSpinner";
+import LoadingSpinner from "./components/Loading/Loading";
 import { useViewportHeight } from "@/hooks/useViewportHeight";
 
 export default function Home() {
