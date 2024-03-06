@@ -16,12 +16,12 @@ const SpinnerContainer = styled.div`
 
 const LoadingSpinner = () => {
   return (
-    <ScreenContainer>
+    <>
       <SpinnerContainer>
         <Image src={LoadingBubble} width={125} height={125} alt="Loading..." />
         <LoadingText />
       </SpinnerContainer>
-    </ScreenContainer>
+    </>
   );
 };
 

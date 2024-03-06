@@ -1,7 +1,4 @@
 import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-
-const LoadingTextStyled = styled.h1``;
 
 const LoadingText = () => {
   const [dots, setDots] = useState("");
@@ -14,7 +11,7 @@ const LoadingText = () => {
     return () => clearInterval(interval);
   }, []);
 
-  return <LoadingTextStyled>Loading{dots}</LoadingTextStyled>;
+  return <h1>Loading{dots}</h1>;
 };
 
 export default LoadingText;
