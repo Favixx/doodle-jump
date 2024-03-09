@@ -1,10 +1,10 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import checkIsMobileDevice from "../utils/isMobileDevice";
-import HomeScreen from "./components/HomeScreen/HomeScreen";
-import NotMobile from "./components/NotMobile/NotMobile";
-import LoadingSpinner from "./components/Loading/Loading";
-import { useViewportHeight } from "@/hooks/useViewportHeight";
+'use client';
+import React, { useState, useEffect } from 'react';
+import checkIsMobileDevice from '../utils/isMobileDevice';
+import HomeScreen from './components/HomeScreen/HomeScreen';
+import NotMobile from './components/NotMobile/NotMobile';
+import LoadingSpinner from './components/Loading/Loading';
+import { useViewportHeight } from '@/hooks/useViewportHeight';
 
 export default function Home() {
   const [isMobile, setIsMobile] = useState<boolean>(false);
@@ -20,10 +20,10 @@ export default function Home() {
 
     isUsingMobile();
 
-    window.addEventListener("resize", isUsingMobile);
+    window.addEventListener('resize', isUsingMobile);
 
     return () => {
-      window.removeEventListener("resize", isUsingMobile);
+      window.removeEventListener('resize', isUsingMobile);
     };
   }, []);
 
