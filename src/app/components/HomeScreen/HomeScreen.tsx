@@ -1,14 +1,16 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import Image from "next/image";
-import { ScreenContainer } from "../styled/ScreenContainer";
+'use client';
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import Image from 'next/image';
+import { ScreenContainer } from '../styled/ScreenContainer';
 
-import balanceImage from "../../../../public/balance.png";
-import userAvatar from "../../../../public/Avatar.jpg";
-import starImage320 from "../../../../public/star320.png";
-import starImage768 from "../../../../public/star768.png";
-import Link from "next/link";
+import balanceImage from '../../../../public/balance.png';
+import userAvatar from '../../../../public/Avatar.jpg';
+import starImage320 from '../../../../public/star320.png';
+import starImage768 from '../../../../public/star768.png';
+import Link from 'next/link';
+
+import useUserContext from '@/hooks/useUserContext';
 
 const ContentContainer = styled.div`
   display: flex;
@@ -49,7 +51,7 @@ const ButtonContainer = styled.div`
 
 const ButtonSmall = styled.button`
   background-color: transparent;
-  background-image: url("/ButtonSmall.png");
+  background-image: url('/ButtonSmall.png');
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -66,7 +68,7 @@ const ButtonSmall = styled.button`
   cursor: pointer;
   @media (min-width: 768px) {
     font-size: 36px;
-    background-image: url("/ButtonSmallTablet.png");
+    background-image: url('/ButtonSmallTablet.png');
     width: 319px;
     height: 198px;
   }
@@ -76,7 +78,7 @@ const Button = styled.button`
   justify-content: center;
   align-items: center;
   background-color: transparent;
-  background-image: url("/Button.png");
+  background-image: url('/Button.png');
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -91,7 +93,7 @@ const Button = styled.button`
   @media (min-width: 768px) {
     width: 648px;
     height: 234px;
-    background-image: url("/ButtonTablet.png");
+    background-image: url('/ButtonTablet.png');
     font-size: 36px;
   }
 `;
@@ -113,6 +115,11 @@ const CharContainer = styled.div`
 `;
 
 const HomeScreen = () => {
+  // Приклад використання контексту
+  // const { user, updateUser } = useUserContext();
+  // <p>Баланс: {user.balance}</p>
+  // <button onClick={() => updateUser({ balance: 20 })}>Змінити баланс</button>
+
   const [currentStarImage, setCurrentStarImage] = useState(starImage320);
   useEffect(() => {
     const handleResize = () => {
@@ -123,28 +130,28 @@ const HomeScreen = () => {
       }
     };
     handleResize();
-    window.addEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
 
-    return () => window.removeEventListener("resize", handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   return (
     <ScreenContainer>
       <ContentContainer>
         <Balance>
-          <Image src={balanceImage} width={48} height={60} alt="Balance" />
+          <Image src={balanceImage} width={48} height={60} alt='Balance' />
           100
         </Balance>
         <AvatarContainer>
-          <Image src={userAvatar} alt="Player Avatar" width={75} height={75} />
+          <Image src={userAvatar} alt='Player Avatar' width={75} height={75} />
         </AvatarContainer>
       </ContentContainer>
       <ContentContainerColumn>
         <CharContainer>
-          <Image src={currentStarImage} alt="Character Skin" />
+          <Image src={currentStarImage} alt='Character Skin' />
         </CharContainer>
         <ButtonsContainer>
-          <Link href={"/game"}>
+          <Link href={'/game'}>
             <Button>Start</Button>
           </Link>
           <ButtonContainer>
