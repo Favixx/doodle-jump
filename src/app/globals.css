@@ -27,6 +27,7 @@ body {
       #0035f0 66.67%,
       #0035ee 83.33%,
       #0035eb 100%);
+  overflow: hidden;
 }
 
 img {
@@ -35,4 +36,8 @@ img {
 
 button {
   font-family: inherit;
+}
+
+a {
+  text-decoration: none;
 }

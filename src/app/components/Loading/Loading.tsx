@@ -1,6 +1,5 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
-import { ScreenContainer } from "../styled/ScreenContainer";
 import LoadingBubble from "../../../../public/bubble.gif";
 import Image from "next/image";
 import LoadingText from "./LoadingText";

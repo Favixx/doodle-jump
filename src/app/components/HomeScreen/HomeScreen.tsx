@@ -8,6 +8,7 @@ import balanceImage from "../../../../public/balance.png";
 import userAvatar from "../../../../public/Avatar.jpg";
 import starImage320 from "../../../../public/star320.png";
 import starImage768 from "../../../../public/star768.png";
+import Link from "next/link";
 
 const ContentContainer = styled.div`
   display: flex;
@@ -131,7 +132,7 @@ const HomeScreen = () => {
     <ScreenContainer>
       <ContentContainer>
         <Balance>
-          <Image src={balanceImage} width={60} height={60} alt="Balance" />
+          <Image src={balanceImage} width={48} height={60} alt="Balance" />
           100
         </Balance>
         <AvatarContainer>
@@ -143,7 +144,9 @@ const HomeScreen = () => {
           <Image src={currentStarImage} alt="Character Skin" />
         </CharContainer>
         <ButtonsContainer>
-          <Button>Start</Button>
+          <Link href={"/game"}>
+            <Button>Start</Button>
+          </Link>
           <ButtonContainer>
             <ButtonSmall>Shop</ButtonSmall>
             <ButtonSmall>Options</ButtonSmall>
