@@ -11,7 +11,12 @@
   "dependencies": {
     "@pixi/core": "^7.4.0",
     "@pixi/display": "^7.4.0",
+    "@pixi/graphics": "^7.4.0",
+    "@pixi/mesh-extras": "^7.4.0",
+    "@pixi/particle-container": "^7.4.0",
     "@pixi/react": "^7.1.1",
+    "@pixi/sprite": "^7.4.0",
+    "@pixi/text-bitmap": "^7.4.0",
     "@types/pixi.js": "^5.0.0",
     "next": "14.1.0",
     "pixi.js": "^8.0.1",
