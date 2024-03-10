@@ -27,7 +27,7 @@ const defaultValue: UserContextType = {
   setUser: () => {},
 };
 
-const UserContext = createContext<UserContextType>(defaultValue);
+export const UserContext = createContext<UserContextType>(defaultValue);
 
 export function UserContextProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useLocalStorage<User>("userInfo", defaultValue.user);

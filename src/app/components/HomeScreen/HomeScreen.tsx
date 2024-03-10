@@ -2,15 +2,14 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Image from "next/image";
+import Link from "next/link";
 import { ScreenContainer } from "../styled/ScreenContainer";
+import useUserContext from "@/hooks/useUserContext";
 
 import balanceImage from "../../../../public/balance.png";
 import userAvatar from "../../../../public/Avatar.jpg";
 import starImage320 from "../../../../public/star320.png";
 import starImage768 from "../../../../public/star768.png";
-import Link from "next/link";
-
-import useUserContext from "@/hooks/useUserContext";
 
 const ContentContainer = styled.div`
   display: flex;
