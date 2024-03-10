@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@pixi/app": "^7.4.0",
+    "@pixi/assets": "^7.4.0",
     "@pixi/core": "^7.4.0",
     "@pixi/display": "^7.4.0",
     "@pixi/graphics": "^7.4.0",
