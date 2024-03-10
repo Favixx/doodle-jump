@@ -1,20 +1,28 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-import { createContext, useContext, ReactNode, useState } from "react";
+import { createContext, useContext, ReactNode } from "react";
+import useLocalStorage from "../hooks/useLocalStorage";
+
+interface User {
+  name: string;
+  star: object;
+  address: string;
+  balance: number;
+  avatar: string;
+  theme: "day" | "night";
+}
 
 interface UserContextType {
-  user: {
-    name: string;
-    star: object;
-    balance: number;
-  };
-  setUser: React.Dispatch<React.SetStateAction<UserContextType["user"]>>;
+  user: User;
+  setUser: React.Dispatch<React.SetStateAction<User>>;
 }
 
 const defaultValue: UserContextType = {
   user: {
     name: "",
-    balance: 0,
+    address: "",
     star: {},
+    balance: 100,
+    avatar: "",
+    theme: "day",
   },
   setUser: () => {},
 };
@@ -22,7 +30,7 @@ const defaultValue: UserContextType = {
 const UserContext = createContext<UserContextType>(defaultValue);
 
 export function UserContextProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<UserContextType["user"]>(defaultValue.user);
+  const [user, setUser] = useLocalStorage<User>("userInfo", defaultValue.user);
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
@@ -31,6 +39,6 @@ export function UserContextProvider({ children }: { children: ReactNode }) {
   );
 }
 
-export function userContext() {
+export function useUserContext() {
   return useContext(UserContext);
 }

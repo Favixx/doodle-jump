@@ -1,25 +1,16 @@
 "use client";
-import React, { useRef, useEffect, useState } from "react";
-import styled from "styled-components";
-
-const StyledCanvas = styled.canvas`
-  width: 100vw;
-  height: 100vh;
-  background-color: transparent;
-`;
+import { Stage } from "@pixi/react";
+import * as PIXI from "pixi.js";
+import React, { useRef, useEffect } from "react";
 
 const Game: React.FC = () => {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const gameRef = useRef<HTMLCanvasElement | null>(null);
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const context = canvas?.getContext("2d");
+  const game = new PIXI.Application();
 
-    if (context) {
-    }
-  }, []);
+  useEffect(() => {}, []);
 
-  return <StyledCanvas ref={canvasRef} />;
+  return <Stage> </Stage>;
 };
 
 export default Game;

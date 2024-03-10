@@ -1,7 +1,8 @@
-import { userContext } from '../contexts/userContext';
+import { useContext } from "react";
+import { UserContext } from "../contexts/userContext";
 
 function useUserContext() {
-  const { user, setUser } = userContext();
+  const { user, setUser } = useContext(UserContext);
 
   const updateUser = (updates: Partial<typeof user>) => {
     setUser((currentUser) => ({
