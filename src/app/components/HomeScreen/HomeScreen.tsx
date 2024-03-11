@@ -8,8 +8,8 @@ import useUserContext from "@/hooks/useUserContext";
 
 import balanceImage from "../../../../public/balance.png";
 import userAvatar from "../../../../public/Avatar.jpg";
-import starImage320 from "../../../../public/star320.png";
-import starImage768 from "../../../../public/star768.png";
+import starImage320 from "../../../../public/s43targ.gif";
+// import starImage768 from "../../../../public/star768.png";
 
 const ContentContainer = styled.div`
   display: flex;
@@ -27,7 +27,6 @@ const AvatarContainer = styled.div`
   border-radius: 50%;
   width: 75px;
   height: 75px;
-  margin-bottom: 5px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -124,11 +123,11 @@ const HomeScreen = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth < 768) {
-        setCurrentStarImage(starImage320);
-      } else {
-        setCurrentStarImage(starImage768);
-      }
+      // if (window.innerWidth < 768) {
+      setCurrentStarImage(starImage320);
+      // } else {
+      //   setCurrentStarImage(starImage768);
+      // }
     };
     handleResize();
     window.addEventListener("resize", handleResize);
@@ -158,7 +157,12 @@ const HomeScreen = () => {
       </ContentContainer>
       <ContentContainerColumn>
         <CharContainer>
-          <Image src={currentStarImage} alt="Character Skin" />
+          <Image
+            src={currentStarImage}
+            alt="Character Skin"
+            width={181}
+            height={176}
+          />
         </CharContainer>
         <ButtonsContainer>
           <Link href={"/game"}>

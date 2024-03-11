@@ -1,9 +1,8 @@
 "use client";
 import { Stage } from "@pixi/react";
-import React, { useRef, useEffect } from "react";
+import React, { useEffect } from "react";
 
 const Game: React.FC = () => {
-  const gameRef = useRef<HTMLCanvasElement | null>(null);
   const width: number = window.innerWidth;
   const height: number = window.innerHeight;
   const options = {
