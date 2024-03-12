@@ -8,7 +8,7 @@ import useUserContext from "@/hooks/useUserContext";
 
 import balanceImage from "../../../../public/balance.png";
 import userAvatar from "../../../../public/Avatar.jpg";
-import starImage320 from "../../../../public/s43targ.gif";
+import starImage from "../../../../public/star.gif";
 // import starImage768 from "../../../../public/star768.png";
 
 const ContentContainer = styled.div`
@@ -118,16 +118,16 @@ const HomeScreen = () => {
   // <p>Баланс: {user.balance}</p>
   // <button onClick={() => updateUser({ balance: 20 })}>Змінити баланс</button>
 
-  const [currentStarImage, setCurrentStarImage] = useState(starImage320);
+  const [currentStarSizes, setCurrentStarSizes] = useState([181, 176]);
   const { user, updateUser } = useUserContext();
 
   useEffect(() => {
     const handleResize = () => {
-      // if (window.innerWidth < 768) {
-      setCurrentStarImage(starImage320);
-      // } else {
-      //   setCurrentStarImage(starImage768);
-      // }
+      if (window.innerWidth < 768) {
+        setCurrentStarSizes([181, 176]);
+      } else {
+        setCurrentStarSizes([408, 397]);
+      }
     };
     handleResize();
     window.addEventListener("resize", handleResize);
@@ -158,10 +158,10 @@ const HomeScreen = () => {
       <ContentContainerColumn>
         <CharContainer>
           <Image
-            src={currentStarImage}
+            src={starImage}
             alt="Character Skin"
-            width={181}
-            height={176}
+            width={currentStarSizes[0]}
+            height={currentStarSizes[1]}
           />
         </CharContainer>
         <ButtonsContainer>
