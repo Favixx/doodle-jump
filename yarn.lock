@@ -174,12 +174,12 @@
 
 "@pixi/app@^7.4.0":
   version "7.4.0"
-  resolved "https://registry.yarnpkg.com/@pixi/app/-/app-7.4.0.tgz#5e738b273fda9a11bee8f59825e804afc132b91f"
+  resolved "https://registry.npmjs.org/@pixi/app/-/app-7.4.0.tgz"
   integrity sha512-9pDB974rfuObG5YHvR7kdWhDiIV26b0GeC4vHRQB3bkmltguMi8SCQ9WQKH3WwRLaflzf9EMZpgX10cU1gLgKg==
 
 "@pixi/assets@^7.4.0":
   version "7.4.0"
-  resolved "https://registry.yarnpkg.com/@pixi/assets/-/assets-7.4.0.tgz#c7c89c4e1be4a37807b5161b13a7fcd81fd46e57"
+  resolved "https://registry.npmjs.org/@pixi/assets/-/assets-7.4.0.tgz"
   integrity sha512-Z7J2ZYSZ41Pr3CK0IXgtVV1HiLm1sG0AOZHAPMwB82wNdIDvmWowo/LkXvQmSHFLxFlEz1hWOdOFs1daWAeIfg==
   dependencies:
     "@types/css-font-loading-module" "^0.0.12"
@@ -227,7 +227,7 @@
 
 "@pixi/graphics@^7.4.0":
   version "7.4.0"
-  resolved "https://registry.yarnpkg.com/@pixi/graphics/-/graphics-7.4.0.tgz#d09c63ef4abc11cfcc1db9864179e01b2bc0b2c2"
+  resolved "https://registry.npmjs.org/@pixi/graphics/-/graphics-7.4.0.tgz"
   integrity sha512-9GcXbP/iTFEA5xwXx6sSwGyIYPd6XVhFJR7ALqqnlYC+FvvvHPoh7cN3HPa1Aw9dWpNRKUKuNcoOYPmd0O0aJA==
 
 "@pixi/math@7.4.0":
@@ -237,17 +237,17 @@
 
 "@pixi/mesh-extras@^7.4.0":
   version "7.4.0"
-  resolved "https://registry.yarnpkg.com/@pixi/mesh-extras/-/mesh-extras-7.4.0.tgz#7f40dd6ef3fad0853b7f3c44fb5489be4081bf27"
+  resolved "https://registry.npmjs.org/@pixi/mesh-extras/-/mesh-extras-7.4.0.tgz"
   integrity sha512-YMI72eDruRd3iUIxfFNW+siuwvvrBv4/A9GDeBySKdfqbMOnzi0GLjxvF88bcP7eujdJQDwzTnAV4hW0UNIkjw==
 
 "@pixi/mesh@^7.4.0":
   version "7.4.0"
-  resolved "https://registry.yarnpkg.com/@pixi/mesh/-/mesh-7.4.0.tgz#fefb420dc4aaf80ce333de135d349b810f4adb23"
+  resolved "https://registry.npmjs.org/@pixi/mesh/-/mesh-7.4.0.tgz"
   integrity sha512-Ql5B3q8UD898LTKTPAkveOU72tN9xD8CsLPuvmPSrjpE5FlyRhrS90JzD26/sz6H3B7Kfu2gRjilmujCzNvuWA==
 
 "@pixi/particle-container@^7.4.0":
   version "7.4.0"
-  resolved "https://registry.yarnpkg.com/@pixi/particle-container/-/particle-container-7.4.0.tgz#ba04e7894edad1a28f68262ca60070d2ced9827f"
+  resolved "https://registry.npmjs.org/@pixi/particle-container/-/particle-container-7.4.0.tgz"
   integrity sha512-y3cB2EvgzfOm/pw4qBFsKOVoRzhzLy/FFj92DbD3bL5a6Z+YtKblkeWw3P5exzZJBTRn9sEk1vhzBb1HM/WEJw==
 
 "@pixi/react@^7.1.1":
@@ -276,27 +276,27 @@
 
 "@pixi/sprite-animated@^7.4.0":
   version "7.4.0"
-  resolved "https://registry.yarnpkg.com/@pixi/sprite-animated/-/sprite-animated-7.4.0.tgz#ba8e66cfe8339796b75c9ff6641e42f9b31264b1"
+  resolved "https://registry.npmjs.org/@pixi/sprite-animated/-/sprite-animated-7.4.0.tgz"
   integrity sha512-SVIO78hHqVvBg5kh13TES0oqmjBhjeQmCgXVzT1nC62Vxh/6AAd9JOKid706lXoqRgw7H7OhdunEWL6J2zN4KA==
 
 "@pixi/sprite-tiling@^7.4.0":
   version "7.4.0"
-  resolved "https://registry.yarnpkg.com/@pixi/sprite-tiling/-/sprite-tiling-7.4.0.tgz#6a3cb75e1e93fbdeb503d05076507d64ed615a4a"
+  resolved "https://registry.npmjs.org/@pixi/sprite-tiling/-/sprite-tiling-7.4.0.tgz"
   integrity sha512-q0wjrdhvqnfSRNYIJ0KHUIT0nARvlmBoKBtjEZLAnk1jQCFzrJIg4qfmsBNDSOzMVaAxAot0EbOLjld6EZmf8w==
 
 "@pixi/sprite@^7.4.0":
   version "7.4.0"
-  resolved "https://registry.yarnpkg.com/@pixi/sprite/-/sprite-7.4.0.tgz#0deafa89b640384bd474322c6a72c6294f8555ae"
+  resolved "https://registry.npmjs.org/@pixi/sprite/-/sprite-7.4.0.tgz"
   integrity sha512-+yQdq3aKS59s9uxiW066geWLCKYTRjtbdgE2qtyUP4pK/bYanWVWash7K8P3qVX8NQsQKjGvNPoa2fkP6MBE1Q==
 
 "@pixi/text-bitmap@^7.4.0":
   version "7.4.0"
-  resolved "https://registry.yarnpkg.com/@pixi/text-bitmap/-/text-bitmap-7.4.0.tgz#b1fad1a233feb11e71ed990495aa9147e56858a7"
+  resolved "https://registry.npmjs.org/@pixi/text-bitmap/-/text-bitmap-7.4.0.tgz"
   integrity sha512-OkYixlqMW9b1EHtEbSP9mgZEqI0WLN1KP4h2EyJk0LC9lH2Ybp3v7ZGHKAetGkSCt8PXY5AfXbcWtm+TgTWbJw==
 
 "@pixi/text@^7.4.0":
   version "7.4.0"
-  resolved "https://registry.yarnpkg.com/@pixi/text/-/text-7.4.0.tgz#0267ac60341511792f410e80fae4e7b9b4696017"
+  resolved "https://registry.npmjs.org/@pixi/text/-/text-7.4.0.tgz"
   integrity sha512-yVVeWYH6N+E38R+D7tvOVwDhbFxrInZ7fkOllfePu3KaKsUXbjklgtKUyPREs1LGJC8ffrpCPo1k9BVmwFA4Eg==
 
 "@pixi/ticker@7.4.0":
@@ -2308,8 +2308,16 @@ streamsearch@^1.1.0:
   resolved "https://registry.npmjs.org/streamsearch/-/streamsearch-1.1.0.tgz"
   integrity sha512-Mcc5wHehp9aXz1ax6bZUyY5afg9u2rv5cqQI3mRrYkGC8rW2hM02jWuwjtL++LS5qinSyhj2QfLyNsuc+VsExg==
 
-"string-width-cjs@npm:string-width@^4.2.0", string-width@^4.1.0:
-  name string-width-cjs
+"string-width-cjs@npm:string-width@^4.2.0":
+  version "4.2.3"
+  resolved "https://registry.npmjs.org/string-width/-/string-width-4.2.3.tgz"
+  integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==
+  dependencies:
+    emoji-regex "^8.0.0"
+    is-fullwidth-code-point "^3.0.0"
+    strip-ansi "^6.0.1"
+
+string-width@^4.1.0:
   version "4.2.3"
   resolved "https://registry.npmjs.org/string-width/-/string-width-4.2.3.tgz"
   integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==
@@ -2369,7 +2377,14 @@ string.prototype.trimstart@^1.0.7:
     define-properties "^1.2.0"
     es-abstract "^1.22.1"
 
-"strip-ansi-cjs@npm:strip-ansi@^6.0.1", strip-ansi@^6.0.0, strip-ansi@^6.0.1:
+"strip-ansi-cjs@npm:strip-ansi@^6.0.1":
+  version "6.0.1"
+  resolved "https://registry.npmjs.org/strip-ansi/-/strip-ansi-6.0.1.tgz"
+  integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
+  dependencies:
+    ansi-regex "^5.0.1"
+
+strip-ansi@^6.0.0, strip-ansi@^6.0.1:
   version "6.0.1"
   resolved "https://registry.npmjs.org/strip-ansi/-/strip-ansi-6.0.1.tgz"
   integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
