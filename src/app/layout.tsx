@@ -8,6 +8,13 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Bubble",
   description: "Crypto game",
+  viewport: {
+    initialScale: 1,
+    minimumScale: 1,
+    maximumScale: 1,
+    width: "device-width",
+    userScalable: false,
+  },
 };
 
 export const viewport: Viewport = {
