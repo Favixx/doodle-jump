@@ -11,6 +11,9 @@ import userAvatar from "../../../../public/Avatar.jpg";
 import starImage from "../../../../public/star.gif";
 // import starImage768 from "../../../../public/star768.png";
 
+// import buttonSmall640 from '../../../../public/buttonSmall_640.png'
+// import button640 from '../../../../public/button_640.png'
+
 const ContentContainer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -64,6 +67,12 @@ const ButtonSmall = styled.button`
   height: 88px;
   color: white;
   cursor: pointer;
+  @media (min-width: 640px) {
+    width: 284px;
+    height: 176px;
+    background-image: url("/buttonSmall_640.png");
+    font-size: 32px;
+  }
   @media (min-width: 768px) {
     font-size: 36px;
     background-image: url("/ButtonSmallTablet.png");
@@ -88,6 +97,12 @@ const Button = styled.button`
   height: 104px;
   color: white;
   cursor: pointer;
+  @media (min-width: 640px) {
+    width: 576px;
+    height: 208px;
+    background-image: url("/button_640.png");
+    font-size: 32px;
+  }
   @media (min-width: 768px) {
     width: 648px;
     height: 234px;
@@ -118,13 +133,23 @@ const HomeScreen = () => {
   // <p>Баланс: {user.balance}</p>
   // <button onClick={() => updateUser({ balance: 20 })}>Змінити баланс</button>
 
-  const [currentStarSizes, setCurrentStarSizes] = useState([181, 176]);
+  const [currentStarSizes, setCurrentStarSizes] = useState<number[]>([
+    181, 176,
+  ]);
   const { user, updateUser } = useUserContext();
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth < 768) {
+      // if (window.innerWidth < 768) {
+      //   setCurrentStarSizes([181, 176]);
+      // } else {
+      //   setCurrentStarSizes([408, 397]);
+      // }
+
+      if (window.innerWidth < 640) {
         setCurrentStarSizes([181, 176]);
+      } else if (window.innerWidth > 640 && window.innerWidth < 768) {
+        setCurrentStarSizes([362, 352]);
       } else {
         setCurrentStarSizes([408, 397]);
       }
