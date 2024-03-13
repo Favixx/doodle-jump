@@ -5,16 +5,16 @@ import HomeScreen from "./components/HomeScreen/HomeScreen";
 import NotMobile from "./components/NotMobile/NotMobile";
 import LoadingSpinner from "./components/Loading/Loading";
 import { useViewportHeight } from "@/hooks/useViewportHeight";
+import { useDesktop } from "@/hooks/useDesktop";
 
 export default function Home() {
-  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const isDesktop = useDesktop();
   const [isInitialized, setIsInitialized] = useState<boolean>(false);
 
   useViewportHeight();
 
   useEffect(() => {
     const isUsingMobile = () => {
-      setIsMobile(checkIsMobileDevice());
       setIsInitialized(true);
     };
 
@@ -31,5 +31,5 @@ export default function Home() {
     return <LoadingSpinner />;
   }
 
-  return <main>{isMobile ? <HomeScreen /> : <NotMobile />}</main>;
+  return <main>{!isDesktop ? <HomeScreen /> : <NotMobile />}</main>;
 }

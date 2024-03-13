@@ -8,22 +8,8 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Bubble",
   description: "Crypto game",
-  viewport: {
-    initialScale: 1,
-    minimumScale: 1,
-    maximumScale: 1,
-    width: "device-width",
-    userScalable: false,
-  },
 };
 
-export const viewport: Viewport = {
-  userScalable: false,
-  width: "device-width",
-  initialScale: 1,
-  maximumScale: 1,
-  minimumScale: 1,
-};
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -34,7 +20,7 @@ export default function RootLayout({
       <Head>
         <meta
           name="viewport"
-          content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"
+          content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=0"
         />
       </Head>
       <body>{children}</body>
