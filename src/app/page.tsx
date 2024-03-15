@@ -1,11 +1,11 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import checkIsMobileDevice from "../utils/isMobileDevice";
 import HomeScreen from "./components/HomeScreen/HomeScreen";
 import NotMobile from "./components/NotMobile/NotMobile";
 import LoadingSpinner from "./components/Loading/Loading";
 import { useViewportHeight } from "@/hooks/useViewportHeight";
 import { useDesktop } from "@/hooks/useDesktop";
+import { GameProvider } from "@/contexts/gameContext";
 
 export default function Home() {
   const isDesktop = useDesktop();
@@ -31,5 +31,9 @@ export default function Home() {
     return <LoadingSpinner />;
   }
 
-  return <main>{!isDesktop ? <HomeScreen /> : <NotMobile />}</main>;
+  return (
+    <GameProvider>
+      <main>{!isDesktop ? <HomeScreen /> : <NotMobile />}</main>;
+    </GameProvider>
+  );
 }
