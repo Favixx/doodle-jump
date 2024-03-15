@@ -33,7 +33,7 @@ export default function Home() {
 
   return (
     <GameProvider>
-      <main>{!isDesktop ? <HomeScreen /> : <NotMobile />}</main>;
+      <main>{!isDesktop ? <HomeScreen /> : <NotMobile />}</main>
     </GameProvider>
   );
 }
