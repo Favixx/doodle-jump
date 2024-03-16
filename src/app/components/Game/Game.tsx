@@ -31,7 +31,7 @@ const initialState: GameState = {
   gameOver: false,
 };
 
-const gravity = 0.0005;
+const gravity = 0.01;
 
 function reducer(state: GameState, action: any): GameState {
   switch (action.type) {
