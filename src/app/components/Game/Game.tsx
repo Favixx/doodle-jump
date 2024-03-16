@@ -1,89 +1,115 @@
-"use client";
-import { Sprite, Stage, useApp } from "@pixi/react";
-import React, { useEffect, useState } from "react";
+import { Sprite, Stage } from "@pixi/react";
+import React, { useReducer, useEffect, useRef } from "react";
 import GameOverModal from "../GameOver/GameOverModal";
+import { useRouter } from "next/navigation";
 
 interface Dimensions {
   width: number;
   height: number;
 }
 
-interface Platforms {
-  x: number;
-  y: number;
+interface GameState {
+  dimensions: Dimensions;
+  playerX: number;
+  playerY: number;
+  playerVelocity: number;
+  platforms: any[]; // Define more specifically if needed
+  score: number;
+  gameOver: boolean;
+}
+
+const initialState: GameState = {
+  dimensions: {
+    width: window.innerWidth,
+    height: window.innerHeight,
+  },
+  playerX: window.innerWidth / 2,
+  playerY: window.innerHeight / 1.7,
+  playerVelocity: 0,
+  platforms: [],
+  score: 0,
+  gameOver: false,
+};
+
+const gravity = 0.0005;
+
+function reducer(state: GameState, action: any): GameState {
+  switch (action.type) {
+    case "update":
+      return { ...state, ...action.payload };
+    case "resize":
+      return {
+        ...state,
+        dimensions: { width: window.innerWidth, height: window.innerHeight },
+        playerX: window.innerWidth / 2, // Reset player X position
+        playerY: window.innerHeight / 1.7, // Reset player Y position
+      };
+    case "gameOver":
+      return { ...state, gameOver: true };
+    default:
+      return state;
+  }
 }
 
 const Game: React.FC = () => {
-  const [dimensions, setDimensions] = useState<Dimensions>({
-    width: window.innerWidth,
-    height: window.innerHeight,
-  });
-  const [playerX, setPlayerX] = useState<number>(dimensions.width / 2);
-  const [playerY, setPlayerY] = useState<number>(300);
-  const [playerVelocity, setPlayerVelocity] = useState<number>(0);
-  const gravity: number = 0.0005;
-  const jumpHeight: number = -10;
-  const [platforms, setPlatforms] = useState<Platforms[]>([]);
-  //
-  const [score, setScore] = useState<number>(0);
-  const [gameOver, setGameOver] = useState<boolean>(false);
+  const router = useRouter();
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const requestRef = useRef<number>();
 
-  const handleModalClose = () => {
-    setGameOver(false);
-  };
-  //
   useEffect(() => {
     const handleResize = () => {
-      setDimensions({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      });
+      dispatch({ type: "resize" });
     };
 
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
   useEffect(() => {
-    let animationFrameId: number = 0;
+    const animate = () => {
+      const newVelocity = state.playerVelocity + gravity;
+      const newY = state.playerY + newVelocity;
 
-    const update = () => {
-      const newVelocity = playerVelocity + gravity;
-      const newY = playerY + newVelocity;
-
-      if (newY > dimensions.height) {
-        setGameOver(true);
-        setPlayerY(dimensions.height);
+      if (newY > state.dimensions.height) {
+        dispatch({ type: "gameOver" });
       } else {
-        setPlayerVelocity(newVelocity);
-        setPlayerY(newY);
+        dispatch({
+          type: "update",
+          payload: { playerVelocity: newVelocity, playerY: newY },
+        });
       }
 
-      animationFrameId = requestAnimationFrame(update);
+      requestRef.current = requestAnimationFrame(animate);
     };
 
-    update();
+    requestRef.current = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(requestRef.current!);
+  }, [state.playerVelocity, state.playerY, state.dimensions.height]);
 
-    return () => cancelAnimationFrame(animationFrameId);
-  }, [dimensions.height, jumpHeight, playerVelocity, playerY]); // Залишаємо лише dimensions.height у масиві залеж
-
-  const options = {
-    backgroundColor: 0x000000,
-    backgroundAlpha: 0,
+  const handleModalClose = () => {
+    router.push("/");
+    dispatch({ type: "gameOver", payload: { gameOver: false } });
   };
 
   return (
     <>
       <Stage
-        width={dimensions.width}
-        height={dimensions.height}
-        options={options}
+        width={state.dimensions.width}
+        height={state.dimensions.height}
+        options={{ backgroundColor: 0x000000, backgroundAlpha: 0 }}
       >
-        {/* Render player */}
-        {!gameOver && (
-          <Sprite x={playerX} y={playerY} image="/star320.png" anchor={0.5} />
+        {!state.gameOver && (
+          <Sprite
+            x={state.playerX}
+            y={state.playerY}
+            image="/star320.png"
+            width={120}
+            height={120}
+            anchor={0.5}
+          />
         )}
       </Stage>
-      {gameOver && <GameOverModal onClose={handleModalClose} />}
+      {state.gameOver && <GameOverModal onClose={handleModalClose} />}
     </>
   );
 };

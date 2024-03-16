@@ -1,13 +1,13 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import Head from "next/head";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Bubble",
   description: "Crypto game",
+};
+export const viewport: Viewport = {
+  userScalable: false,
 };
 
 export default function RootLayout({

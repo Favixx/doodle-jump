@@ -1,5 +1,3 @@
-// GameOverModal.tsx
-import Link from "next/link";
 import React from "react";
 import styled from "styled-components";
 
@@ -41,9 +39,7 @@ const GameOverModal: React.FC<GameOverModalProps> = ({ onClose }) => {
       <ModalContent>
         <h2>Game Over</h2>
         <p>You lost! Try again?</p>
-        <Link href={"/"}>
-          <CloseButton onClick={onClose}>Close</CloseButton>
-        </Link>
+        <CloseButton onClick={onClose}>Close</CloseButton>
       </ModalContent>
     </ModalContainer>
   );
