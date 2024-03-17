@@ -24,12 +24,14 @@
     "@pixi/text": "^7.4.0",
     "@pixi/text-bitmap": "^7.4.0",
     "@types/pixi.js": "^5.0.0",
+    "@types/uuid": "^9.0.8",
     "next": "14.1.0",
     "pixi.js": "^8.0.1",
     "react": "^18",
     "react-device-detect": "^2.2.3",
     "react-dom": "^18",
-    "styled-components": "^6.1.8"
+    "styled-components": "^6.1.8",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@types/node": "^20",
