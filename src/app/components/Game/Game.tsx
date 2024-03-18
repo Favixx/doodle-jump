@@ -110,7 +110,7 @@ const Game: React.FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (!state.gameOver && state.platforms.length < 5) {
+    if (!state.gameOver && state.platforms.length < 2) {
       console.log("Adding platform due to condition.");
       addPlatform(); // Додаємо платформи, якщо гра триває і їх менше 8
     }
@@ -150,6 +150,33 @@ const Game: React.FC = () => {
       ) {
         // Якщо є зіткнення, виконуємо необхідні дії, наприклад, змінюємо рахунок, тощо
         console.log("Collision with platform!");
+        // Якщо гравець знаходиться над платформою, то робимо пружинний стрибок
+        const playerAbovePlatform = state.playerY < platform.y;
+
+        if (playerAbovePlatform) {
+          const jumpSpeed = -3; // Швидкість стрибка (від'ємне значення для руху вверх)
+
+          let newPlayerVelocity = jumpSpeed; // Нова швидкість гравця під час стрибка
+          const gravity = 0.9; // Гравітація
+
+          // Функція для анімації стрибка
+          const jump = () => {
+            if (newPlayerVelocity < 0) {
+              // Поки гравець рухається вверх
+              const newY = state.playerY + newPlayerVelocity; // Нова вертикальна позиція гравця
+              newPlayerVelocity += gravity; // Збільшуємо швидкість падіння згідно гравітації
+
+              dispatch({
+                type: "update",
+                payload: { playerY: newY, playerVelocity: newPlayerVelocity },
+              });
+
+              requestAnimationFrame(jump); // Продовжуємо анімацію стрибка
+            }
+          };
+
+          jump(); // Розпочинаємо анімацію стрибка
+        }
       }
     });
   };
