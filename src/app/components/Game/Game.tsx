@@ -116,6 +116,44 @@ const Game: React.FC = () => {
     }
   }, [state.gameOver, state.platforms.length, addPlatform]);
 
+  // 18.03 проверка на соприкосновение игрока с платформой
+  useEffect(() => {
+    checkCollision(); // Перевірка зіткнення при кожному оновленні стану гравця або платформ
+  }, [state.playerX, state.playerY, state.platforms]);
+
+  const checkCollision = () => {
+    const playerWidth = 120; // Ширина гравця
+    const playerHeight = 120; // Висота гравця
+
+    // Координати границь гравця
+    const playerLeft = state.playerX - playerWidth / 2;
+    const playerRight = state.playerX + playerWidth / 2;
+    const playerTop = state.playerY - playerHeight / 2;
+    const playerBottom = state.playerY + playerHeight / 2;
+
+    state.platforms.forEach((platform) => {
+      const platformWidth = 108; // Ширина платформи
+      const platformHeight = 108; // Висота платформи
+
+      // Координати границь платформи
+      const platformLeft = platform.x - platformWidth / 2;
+      const platformRight = platform.x + platformWidth / 2;
+      const platformTop = platform.y - platformHeight / 2;
+      const platformBottom = platform.y + platformHeight / 2;
+
+      // Перевірка перетину границь гравця і платформи
+      if (
+        playerRight > platformLeft &&
+        playerLeft < platformRight &&
+        playerBottom > platformTop &&
+        playerTop < platformBottom
+      ) {
+        // Якщо є зіткнення, виконуємо необхідні дії, наприклад, змінюємо рахунок, тощо
+        console.log("Collision with platform!");
+      }
+    });
+  };
+
   return (
     <>
       <Stage
