@@ -110,11 +110,76 @@ const Game: React.FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (!state.gameOver && state.platforms.length < 5) {
+    if (!state.gameOver && state.platforms.length < 2) {
       console.log("Adding platform due to condition.");
       addPlatform(); // Додаємо платформи, якщо гра триває і їх менше 8
     }
   }, [state.gameOver, state.platforms.length, addPlatform]);
+
+  // 18.03 проверка на соприкосновение игрока с платформой
+  useEffect(() => {
+    checkCollision(); // Перевірка зіткнення при кожному оновленні стану гравця або платформ
+  }, [state.playerX, state.playerY, state.platforms]);
+
+  const checkCollision = () => {
+    const playerWidth = 120; // Ширина гравця
+    const playerHeight = 120; // Висота гравця
+
+    // Координати границь гравця
+    const playerLeft = state.playerX - playerWidth / 2;
+    const playerRight = state.playerX + playerWidth / 2;
+    const playerTop = state.playerY - playerHeight / 2;
+    const playerBottom = state.playerY + playerHeight / 2;
+
+    state.platforms.forEach((platform) => {
+      const platformWidth = 108; // Ширина платформи
+      const platformHeight = 108; // Висота платформи
+
+      // Координати границь платформи
+      const platformLeft = platform.x - platformWidth / 2;
+      const platformRight = platform.x + platformWidth / 2;
+      const platformTop = platform.y - platformHeight / 2;
+      const platformBottom = platform.y + platformHeight / 2;
+
+      // Перевірка перетину границь гравця і платформи
+      if (
+        playerRight > platformLeft &&
+        playerLeft < platformRight &&
+        playerBottom > platformTop &&
+        playerTop < platformBottom
+      ) {
+        // Якщо є зіткнення, виконуємо необхідні дії, наприклад, змінюємо рахунок, тощо
+        console.log("Collision with platform!");
+        // Якщо гравець знаходиться над платформою, то робимо пружинний стрибок
+        const playerAbovePlatform = state.playerY < platform.y;
+
+        if (playerAbovePlatform) {
+          const jumpSpeed = -3; // Швидкість стрибка (від'ємне значення для руху вверх)
+
+          let newPlayerVelocity = jumpSpeed; // Нова швидкість гравця під час стрибка
+          const gravity = 0.9; // Гравітація
+
+          // Функція для анімації стрибка
+          const jump = () => {
+            if (newPlayerVelocity < 0) {
+              // Поки гравець рухається вверх
+              const newY = state.playerY + newPlayerVelocity; // Нова вертикальна позиція гравця
+              newPlayerVelocity += gravity; // Збільшуємо швидкість падіння згідно гравітації
+
+              dispatch({
+                type: "update",
+                payload: { playerY: newY, playerVelocity: newPlayerVelocity },
+              });
+
+              requestAnimationFrame(jump); // Продовжуємо анімацію стрибка
+            }
+          };
+
+          jump(); // Розпочинаємо анімацію стрибка
+        }
+      }
+    });
+  };
 
   return (
     <>
