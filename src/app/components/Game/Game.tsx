@@ -14,6 +14,16 @@ interface Platform {
   y: number;
 }
 
+// Добавляем новые действия для обработки движения игрока влево и вправо
+type ActionType =
+  | "update"
+  | "resize"
+  | "gameOver"
+  | "addPlatform"
+  | "resetPlatforms"
+  | "moveLeft"
+  | "moveRight";
+
 interface GameState {
   dimensions: Dimensions;
   playerX: number;
@@ -22,6 +32,8 @@ interface GameState {
   platforms: Platform[];
   score: number;
   gameOver: boolean;
+  // Новое свойство для отслеживания направления движения
+  direction: "left" | "right" | null;
 }
 
 const initialState: GameState = {
@@ -35,6 +47,7 @@ const initialState: GameState = {
   platforms: [],
   score: 0,
   gameOver: false,
+  direction: null, // Изначально игрок не двигается
 };
 
 const gravity = 0.01;
@@ -60,6 +73,10 @@ function reducer(state: GameState, action: any): GameState {
       return { ...state, platforms: [...state.platforms, newPlatform] };
     case "resetPlatforms":
       return { ...state, platforms: [] };
+    case "moveLeft":
+      return { ...state, direction: "left" };
+    case "moveRight":
+      return { ...state, direction: "right" };
     default:
       return state;
   }
@@ -70,6 +87,42 @@ const Game: React.FC = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const requestRef = useRef<number>();
 
+  // Обработчики событий для движения влево и вправо
+  const handleMoveLeft = () => {
+    dispatch({ type: "moveLeft" });
+  };
+
+  const handleMoveRight = () => {
+    dispatch({ type: "moveRight" });
+  };
+
+  useEffect(() => {
+    // Добавляем слушателей для событий касания
+    window.addEventListener("touchstart", handleTouchStart);
+    window.addEventListener("touchend", handleTouchEnd);
+    return () => {
+      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("touchend", handleTouchEnd);
+    };
+  }, []);
+
+  // Обработка начала касания
+  const handleTouchStart = (event: TouchEvent) => {
+    const touchX = event.touches[0].clientX;
+    // Определяем, с какой стороны экрана произошло касание и вызываем соответствующий обработчик
+    if (touchX < window.innerWidth / 2) {
+      handleMoveLeft();
+    } else {
+      handleMoveRight();
+    }
+  };
+
+  // Обработка окончания касания
+  const handleTouchEnd = () => {
+    // При окончании касания останавливаем движение игрока
+    dispatch({ type: "update", payload: { direction: null } });
+  };
+
   useEffect(() => {
     const handleResize = () => {
       dispatch({ type: "resize" });
@@ -79,17 +132,36 @@ const Game: React.FC = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // Модифицируем метод animate для учета текущего направления движения
   useEffect(() => {
     const animate = () => {
       const newVelocity = state.playerVelocity + gravity;
       const newY = state.playerY + newVelocity;
+      let newX = state.playerX;
+
+      // Обновляем положение игрока по оси X с учетом текущего направления
+      if (state.direction === "left") {
+        newX -= 5;
+      } else if (state.direction === "right") {
+        newX += 5;
+      }
+      // Перемещаем игрока на противоположную сторону, если он вышел за границы экрана
+      if (newX < 0) {
+        newX = state.dimensions.width;
+      } else if (newX > state.dimensions.width) {
+        newX = 0;
+      }
 
       if (newY > state.dimensions.height) {
         dispatch({ type: "gameOver" });
       } else {
         dispatch({
           type: "update",
-          payload: { playerVelocity: newVelocity, playerY: newY },
+          payload: {
+            playerVelocity: newVelocity,
+            playerY: newY,
+            playerX: newX,
+          },
         });
       }
 
@@ -98,7 +170,13 @@ const Game: React.FC = () => {
 
     requestRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(requestRef.current!);
-  }, [state.playerVelocity, state.playerY, state.dimensions.height]);
+  }, [
+    state.playerVelocity,
+    state.playerY,
+    state.playerX,
+    state.dimensions.height,
+    state.direction,
+  ]);
 
   const handleModalClose = () => {
     router.push("/");
