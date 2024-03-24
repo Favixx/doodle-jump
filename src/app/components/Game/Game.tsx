@@ -1,8 +1,8 @@
-import { Sprite, Stage } from "@pixi/react";
-import React, { useReducer, useEffect, useRef, useCallback } from "react";
-import GameOverModal from "../GameOver/GameOverModal";
-import { useRouter } from "next/navigation";
-import { v4 as uuidv4 } from "uuid";
+import { Sprite, Stage } from '@pixi/react';
+import React, { useReducer, useEffect, useRef, useCallback } from 'react';
+import GameOverModal from '../GameOver/GameOverModal';
+import { useRouter } from 'next/navigation';
+import { v4 as uuidv4 } from 'uuid';
 
 interface Dimensions {
   width: number;
@@ -10,19 +10,20 @@ interface Dimensions {
 }
 
 interface Platform {
+  id: string;
   x: number;
   y: number;
 }
 
 // Добавляем новые действия для обработки движения игрока влево и вправо
 type ActionType =
-  | "update"
-  | "resize"
-  | "gameOver"
-  | "addPlatform"
-  | "resetPlatforms"
-  | "moveLeft"
-  | "moveRight";
+  | 'update'
+  | 'resize'
+  | 'gameOver'
+  | 'addPlatform'
+  | 'resetPlatforms'
+  | 'moveLeft'
+  | 'moveRight';
 
 interface GameState {
   dimensions: Dimensions;
@@ -33,7 +34,7 @@ interface GameState {
   score: number;
   gameOver: boolean;
   // Новое свойство для отслеживания направления движения
-  direction: "left" | "right" | null;
+  direction: 'left' | 'right' | null;
 }
 
 const initialState: GameState = {
@@ -54,29 +55,30 @@ const gravity = 0.01;
 
 function reducer(state: GameState, action: any): GameState {
   switch (action.type) {
-    case "update":
+    case 'update':
       return { ...state, ...action.payload };
-    case "resize":
+    case 'resize':
       return {
         ...state,
         dimensions: { width: window.innerWidth, height: window.innerHeight },
         playerX: window.innerWidth / 2,
         playerY: window.innerHeight / 1.7,
       };
-    case "gameOver":
+    case 'gameOver':
       return { ...state, gameOver: true };
-    case "addPlatform":
+    case 'addPlatform':
       const newPlatform: Platform = {
+        id: uuidv4(),
         x: Math.random() * (state.dimensions.width - 100),
         y: Math.random() * (state.dimensions.height - 100),
       };
       return { ...state, platforms: [...state.platforms, newPlatform] };
-    case "resetPlatforms":
+    case 'resetPlatforms':
       return { ...state, platforms: [] };
-    case "moveLeft":
-      return { ...state, direction: "left" };
-    case "moveRight":
-      return { ...state, direction: "right" };
+    case 'moveLeft':
+      return { ...state, direction: 'left' };
+    case 'moveRight':
+      return { ...state, direction: 'right' };
     default:
       return state;
   }
@@ -89,20 +91,20 @@ const Game: React.FC = () => {
 
   // Обработчики событий для движения влево и вправо
   const handleMoveLeft = () => {
-    dispatch({ type: "moveLeft" });
+    dispatch({ type: 'moveLeft' });
   };
 
   const handleMoveRight = () => {
-    dispatch({ type: "moveRight" });
+    dispatch({ type: 'moveRight' });
   };
 
   useEffect(() => {
     // Добавляем слушателей для событий касания
-    window.addEventListener("touchstart", handleTouchStart);
-    window.addEventListener("touchend", handleTouchEnd);
+    window.addEventListener('touchstart', handleTouchStart);
+    window.addEventListener('touchend', handleTouchEnd);
     return () => {
-      window.removeEventListener("touchstart", handleTouchStart);
-      window.removeEventListener("touchend", handleTouchEnd);
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchend', handleTouchEnd);
     };
   }, []);
 
@@ -120,16 +122,16 @@ const Game: React.FC = () => {
   // Обработка окончания касания
   const handleTouchEnd = () => {
     // При окончании касания останавливаем движение игрока
-    dispatch({ type: "update", payload: { direction: null } });
+    dispatch({ type: 'update', payload: { direction: null } });
   };
 
   useEffect(() => {
     const handleResize = () => {
-      dispatch({ type: "resize" });
+      dispatch({ type: 'resize' });
     };
 
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   // Модифицируем метод animate для учета текущего направления движения
@@ -140,9 +142,9 @@ const Game: React.FC = () => {
       let newX = state.playerX;
 
       // Обновляем положение игрока по оси X с учетом текущего направления
-      if (state.direction === "left") {
+      if (state.direction === 'left') {
         newX -= 5;
-      } else if (state.direction === "right") {
+      } else if (state.direction === 'right') {
         newX += 5;
       }
       // Перемещаем игрока на противоположную сторону, если он вышел за границы экрана
@@ -153,10 +155,10 @@ const Game: React.FC = () => {
       }
 
       if (newY > state.dimensions.height) {
-        dispatch({ type: "gameOver" });
+        dispatch({ type: 'gameOver' });
       } else {
         dispatch({
-          type: "update",
+          type: 'update',
           payload: {
             playerVelocity: newVelocity,
             playerY: newY,
@@ -179,17 +181,17 @@ const Game: React.FC = () => {
   ]);
 
   const handleModalClose = () => {
-    router.push("/");
-    dispatch({ type: "gameOver", payload: { gameOver: false } });
+    router.push('/');
+    dispatch({ type: 'gameOver', payload: { gameOver: false } });
   };
 
   const addPlatform = useCallback(() => {
-    dispatch({ type: "addPlatform" });
+    dispatch({ type: 'addPlatform' });
   }, [dispatch]);
 
   useEffect(() => {
-    if (!state.gameOver && state.platforms.length < 2) {
-      console.log("Adding platform due to condition.");
+    if (!state.gameOver && state.platforms.length < 5) {
+      console.log('Adding platform due to condition.');
       addPlatform(); // Додаємо платформи, якщо гра триває і їх менше 8
     }
   }, [state.gameOver, state.platforms.length, addPlatform]);
@@ -206,7 +208,7 @@ const Game: React.FC = () => {
     // Координати границь гравця
     const playerLeft = state.playerX - playerWidth / 2;
     const playerRight = state.playerX + playerWidth / 2;
-    const playerTop = state.playerY - playerHeight / 2;
+    // const playerTop = state.playerY - playerHeight / 2;
     const playerBottom = state.playerY + playerHeight / 2;
 
     state.platforms.forEach((platform) => {
@@ -217,21 +219,36 @@ const Game: React.FC = () => {
       const platformLeft = platform.x - platformWidth / 2;
       const platformRight = platform.x + platformWidth / 2;
       const platformTop = platform.y - platformHeight / 2;
-      const platformBottom = platform.y + platformHeight / 2;
+      // const platformBottom = platform.y + platformHeight / 2;
 
       // Перевірка перетину границь гравця і платформи
       if (
         playerRight > platformLeft &&
         playerLeft < platformRight &&
         playerBottom > platformTop &&
-        playerTop < platformBottom
+        playerBottom - state.playerVelocity < platformTop
       ) {
         // Якщо є зіткнення, виконуємо необхідні дії, наприклад, змінюємо рахунок, тощо
-        console.log("Collision with platform!");
+        console.log('Collision with platform!');
         // Якщо гравець знаходиться над платформою, то робимо пружинний стрибок
         const playerAbovePlatform = state.playerY < platform.y;
 
         if (playerAbovePlatform) {
+          const newPlatforms = state.platforms.filter(
+            (p) => p.id !== platform.id
+          );
+
+          const newPlatform: Platform = {
+            id: uuidv4(),
+            x: Math.random() * (state.dimensions.width - 100),
+            y: Math.random() * (state.dimensions.height - 100),
+          };
+
+          dispatch({
+            type: 'update',
+            payload: { platforms: [...newPlatforms, newPlatform] },
+          });
+
           const jumpSpeed = -3; // Швидкість стрибка (від'ємне значення для руху вверх)
 
           let newPlayerVelocity = jumpSpeed; // Нова швидкість гравця під час стрибка
@@ -245,8 +262,11 @@ const Game: React.FC = () => {
               newPlayerVelocity += gravity; // Збільшуємо швидкість падіння згідно гравітації
 
               dispatch({
-                type: "update",
-                payload: { playerY: newY, playerVelocity: newPlayerVelocity },
+                type: 'update',
+                payload: {
+                  playerVelocity: -3,
+                  playerY: platformTop - playerHeight / 2,
+                },
               });
 
               requestAnimationFrame(jump); // Продовжуємо анімацію стрибка
@@ -269,7 +289,7 @@ const Game: React.FC = () => {
         {!state.gameOver &&
           state.platforms.map((platform) => (
             <Sprite
-              image="/bub108pg.png"
+              image='/bub108pg.png'
               key={uuidv4()}
               x={platform.x}
               y={platform.y}
@@ -283,7 +303,7 @@ const Game: React.FC = () => {
           <Sprite
             x={state.playerX}
             y={state.playerY}
-            image="/star320.png"
+            image='/star320.png'
             width={120}
             height={120}
             anchor={0.5}
