@@ -1,11 +1,11 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import HomeScreen from "./components/HomeScreen/HomeScreen";
-import NotMobile from "./components/NotMobile/NotMobile";
-import LoadingSpinner from "./components/Loading/Loading";
-import { useViewportHeight } from "@/hooks/useViewportHeight";
-import { useDesktop } from "@/hooks/useDesktop";
-import { GameProvider } from "@/contexts/gameContext";
+'use client';
+import React, { useState, useEffect } from 'react';
+import HomeScreen from './components/HomeScreen/HomeScreen';
+import NotMobile from './components/NotMobile/NotMobile';
+import LoadingSpinner from './components/Loading/Loading';
+import { useViewportHeight } from '@/hooks/useViewportHeight';
+import { useDesktop } from '@/hooks/useDesktop';
+import { GameProvider } from '@/contexts/gameContext';
 
 export default function Home() {
   const isDesktop = useDesktop();
@@ -20,10 +20,10 @@ export default function Home() {
 
     isUsingMobile();
 
-    window.addEventListener("resize", isUsingMobile);
+    window.addEventListener('resize', isUsingMobile);
 
     return () => {
-      window.removeEventListener("resize", isUsingMobile);
+      window.removeEventListener('resize', isUsingMobile);
     };
   }, []);
 
