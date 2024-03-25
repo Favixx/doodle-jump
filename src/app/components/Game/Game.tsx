@@ -35,9 +35,6 @@ interface GameState {
   gameOver: boolean;
   // Новое свойство для отслеживания направления движения
   direction: 'left' | 'right' | null;
-  cameraY: number;
-  platformYOffset: number;
-  targetPlatformYOffset: number;
 }
 
 const initialState: GameState = {
@@ -52,16 +49,9 @@ const initialState: GameState = {
   score: 0,
   gameOver: false,
   direction: null, // Изначально игрок не двигается
-  cameraY: 0,
-  platformYOffset: 0,
-  targetPlatformYOffset: 0,
 };
 
 const gravity = 0.01;
-
-function lerp(start: number, end: number, alpha: number): number {
-  return start + (end - start) * alpha;
-}
 
 function reducer(state: GameState, action: any): GameState {
   switch (action.type) {
@@ -150,18 +140,6 @@ const Game: React.FC = () => {
       const newVelocity = state.playerVelocity + gravity;
       const newY = state.playerY + newVelocity;
       let newX = state.playerX;
-
-      const newPlatformYOffset = lerp(
-        state.platformYOffset,
-        state.targetPlatformYOffset,
-        0.05
-      ); // Плавно змінюємо положення платформ
-      dispatch({
-        type: 'update',
-        payload: {
-          platformYOffset: newPlatformYOffset,
-        },
-      });
 
       // Обновляем положение игрока по оси X с учетом текущего направления
       if (state.direction === 'left') {
@@ -260,8 +238,6 @@ const Game: React.FC = () => {
             (p) => p.id !== platform.id
           );
 
-          const cameraLift = state.playerY - state.dimensions.height / 2;
-
           const newPlatform: Platform = {
             id: uuidv4(),
             x: Math.random() * (state.dimensions.width - 100),
@@ -270,10 +246,7 @@ const Game: React.FC = () => {
 
           dispatch({
             type: 'update',
-            payload: {
-              platforms: [...newPlatforms, newPlatform],
-              cameraY: state.cameraY + cameraLift,
-            },
+            payload: { platforms: [...newPlatforms, newPlatform] },
           });
 
           const jumpSpeed = -3; // Швидкість стрибка (від'ємне значення для руху вверх)
@@ -293,13 +266,6 @@ const Game: React.FC = () => {
                 payload: {
                   playerVelocity: -3,
                   playerY: platformTop - playerHeight / 2,
-                },
-              });
-
-              dispatch({
-                type: 'update',
-                payload: {
-                  targetPlatformYOffset: state.targetPlatformYOffset + 100, // Припустимо, що ми хочемо підняти екран на 100 пікселів
                 },
               });
 
@@ -326,7 +292,7 @@ const Game: React.FC = () => {
               image='/bub108pg.png'
               key={uuidv4()}
               x={platform.x}
-              y={platform.y + state.platformYOffset}
+              y={platform.y}
               width={108}
               height={108}
               anchor={0.5}
@@ -336,7 +302,7 @@ const Game: React.FC = () => {
         {!state.gameOver && (
           <Sprite
             x={state.playerX}
-            y={state.playerY - state.cameraY}
+            y={state.playerY}
             image='/star320.png'
             width={120}
             height={120}
