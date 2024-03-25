@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ScreenContainer } from "../styled/ScreenContainer";
 import useUserContext from "@/hooks/useUserContext";
-
+import OptionsModal from "../Options/Options";
 import balanceImage from "../../../../public/balance.png";
 import userAvatar from "../../../../public/Avatar.jpg";
 import starImage from "../../../../public/star.gif";
@@ -136,6 +136,8 @@ const HomeScreen = () => {
   const [currentStarSizes, setCurrentStarSizes] = useState<number[]>([
     181, 176,
   ]);
+  const [showOptionsModal, setShowOptionsModal] = useState(false); // Состояние для отображения модального окна
+
   const { user, updateUser } = useUserContext();
 
   useEffect(() => {
@@ -195,7 +197,13 @@ const HomeScreen = () => {
           </Link>
           <ButtonContainer>
             <ButtonSmall>Shop</ButtonSmall>
-            <ButtonSmall>Options</ButtonSmall>
+            <ButtonSmall onClick={() => setShowOptionsModal(true)}>
+              Options
+            </ButtonSmall>
+            {/* Модальное окно для Options */}
+            {showOptionsModal && (
+              <OptionsModal onClose={() => setShowOptionsModal(false)} />
+            )}
           </ButtonContainer>
         </ButtonsContainer>
       </ContentContainerColumn>
