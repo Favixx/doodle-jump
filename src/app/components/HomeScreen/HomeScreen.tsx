@@ -200,7 +200,6 @@ const HomeScreen = () => {
             <ButtonSmall onClick={() => setShowOptionsModal(true)}>
               Options
             </ButtonSmall>
-            {/* Модальное окно для Options */}
             {showOptionsModal && (
               <OptionsModal onClose={() => setShowOptionsModal(false)} />
             )}

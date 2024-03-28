@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Sprite, Stage } from '@pixi/react';
 import React, { useReducer, useEffect, useRef, useCallback } from 'react';
 import GameOverModal from '../GameOver/GameOverModal';
@@ -33,8 +34,9 @@ interface GameState {
   platforms: Platform[];
   score: number;
   gameOver: boolean;
-  // Новое свойство для отслеживания направления движения
   direction: 'left' | 'right' | null;
+  cameraLift: number;
+  lastPlatformSide: 'left' | 'right' | null;
 }
 
 const initialState: GameState = {
@@ -48,7 +50,9 @@ const initialState: GameState = {
   platforms: [],
   score: 0,
   gameOver: false,
-  direction: null, // Изначально игрок не двигается
+  direction: null,
+  cameraLift: 0,
+  lastPlatformSide: 'right',
 };
 
 const gravity = 0.01;
@@ -67,12 +71,23 @@ function reducer(state: GameState, action: any): GameState {
     case 'gameOver':
       return { ...state, gameOver: true };
     case 'addPlatform':
+      const side = state.lastPlatformSide === 'left' ? 'right' : 'left';
+      let x;
+      if (side === 'left') {
+        x = 50 + Math.random() * 100;
+      } else {
+        x = state.dimensions.width - (50 + Math.random() * 100);
+      }
       const newPlatform: Platform = {
         id: uuidv4(),
-        x: Math.random() * (state.dimensions.width - 100),
-        y: Math.random() * (state.dimensions.height - 100),
+        x: x,
+        y: Math.random() * (state.dimensions.height - 100) + state.cameraLift,
       };
-      return { ...state, platforms: [...state.platforms, newPlatform] };
+      return {
+        ...state,
+        platforms: [...state.platforms, newPlatform],
+        lastPlatformSide: side,
+      };
     case 'resetPlatforms':
       return { ...state, platforms: [] };
     case 'moveLeft':
@@ -289,7 +304,7 @@ const Game: React.FC = () => {
         {!state.gameOver &&
           state.platforms.map((platform) => (
             <Sprite
-              image='/bub108pg.png'
+              image="/bub108pg.png"
               key={uuidv4()}
               x={platform.x}
               y={platform.y}
@@ -303,7 +318,7 @@ const Game: React.FC = () => {
           <Sprite
             x={state.playerX}
             y={state.playerY}
-            image='/star320.png'
+            image="/star320.png"
             width={120}
             height={120}
             anchor={0.5}
