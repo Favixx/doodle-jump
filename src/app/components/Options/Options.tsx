@@ -1,5 +1,5 @@
-import React, { useReducer } from "react";
-import styled from "styled-components";
+import React, { useReducer } from 'react';
+import styled from 'styled-components';
 
 // Стили для оверлея модального окна
 const ModalOverlay = styled.div`
@@ -18,7 +18,6 @@ const ModalOverlay = styled.div`
 const ModalContent = styled.div`
   background-color: #cb6cc7;
   width: 82vw;
-  height: 75vh;
   padding: 20px;
   border-radius: 8px;
   position: relative; /* Добавляем позиционирование для кнопки закрытия */
@@ -35,14 +34,10 @@ const ModalContent = styled.div`
 `;
 
 const Gifplacer = styled.div`
-  position: absolute;
-  top: 12%;
-  left: 50%;
-
-  transform: translate(-50%);
   width: 256px;
   height: 416px;
-  background-image: url("./gifplacer320.png");
+  margin: auto;
+  background-image: url('./gifplacer320.png');
 `;
 
 // Стили для кнопки закрытия модального окна
@@ -53,13 +48,10 @@ const CloseButton = styled.button`
   right: 16px;
   background-color: transparent;
   border: none;
-  background-image: url("./buttonclose.png");
+  background-image: url('./buttonclose.png');
   width: 40px;
   height: 40px;
 `;
-
-// Стили для иконки закрытия модального окна
-// const CloseIcon = styled.span``;
 
 // Интерфейс пропсов для компонента OptionsModal
 interface OptionsModalProps {
@@ -67,10 +59,9 @@ interface OptionsModalProps {
 }
 
 const Switcher = styled.div`
-  position: absolute;
-  top: 80%;
-  left: 50%;
-  transform: translate(-50%);
+  display: flex;
+  justify-content: center;
+  padding: 20px 0 0 0;
 `;
 
 // Стили для свитчера
@@ -80,7 +71,7 @@ const SwitcherWrapper = styled.div<{ switched: boolean }>`
   padding: 6px 7px;
   align-items: center;
   border-radius: 50px;
-  background-color: ${({ switched }) => (switched ? "#183A5D" : "#fff")};
+  background-color: ${({ switched }) => (switched ? '#183A5D' : '#fff')};
   transition: background-color 0.25s ease-in-out;
   position: relative;
 `;
@@ -93,14 +84,14 @@ const SwitcherState = styled.div<{ switched: boolean }>`
   width: 75px;
   height: 75px;
   border-radius: 50%;
-  background-color: ${({ switched }) => (switched ? "#fff" : "#183A5D")};
+  background-color: ${({ switched }) => (switched ? '#fff' : '#183A5D')};
   position: absolute;
-  left: ${({ switched }) => (switched ? "calc(100% - 80px)" : "4px")};
+  left: ${({ switched }) => (switched ? 'calc(100% - 80px)' : '4px')};
   transition: left 0.25s ease-in-out, background-color 0.25s ease-in-out;
 `;
 
 // Тип для действия
-type Action = { type: "TOGGLE" };
+type Action = { type: 'TOGGLE' };
 
 // Интерфейс для состояния свитчера
 interface State {
@@ -113,7 +104,7 @@ const initialState: State = { switched: false };
 // Редуктор для изменения состояния свитчера
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
-    case "TOGGLE":
+    case 'TOGGLE':
       return { switched: !state.switched };
     default:
       return state;
@@ -134,20 +125,19 @@ const OptionsModal: React.FC<OptionsModalProps> = ({ onClose }) => {
 
   // Обработчик клика по свитчеру для его изменения
   const handleClick = () => {
-    dispatch({ type: "TOGGLE" }); // Переключить состояние свитчера
+    dispatch({ type: 'TOGGLE' }); // Переключить состояние свитчера
     console.log(state.switched ? 0 : 1); // Вывести состояние свитчера в консоль
   };
 
   return (
     <ModalOverlay onClick={handleOverlayClick}>
       <ModalContent>
-        <Gifplacer></Gifplacer>
-        {/* Кнопка закрытия модального окна */}
-        <CloseButton onClick={onClose}>
-          {/* <CloseIcon>&times;</CloseIcon> */}
-        </CloseButton>
-        {/* Заголовок модального окна */}
         <h2>Options</h2>
+        <CloseButton onClick={onClose} />
+        <Gifplacer />
+        {/* Кнопка закрытия модального окна */}
+        {/* <CloseIcon>&times;</CloseIcon> */}
+        {/* Заголовок модального окна */}
         {/* Свитчер для опций */}
         <Switcher>
           <SwitcherWrapper switched={state.switched} onClick={handleClick}>
