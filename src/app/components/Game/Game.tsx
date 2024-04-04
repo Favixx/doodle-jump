@@ -14,6 +14,8 @@ interface Platform {
   id: string;
   x: number;
   y: number;
+  width: number;
+  height: number;
 }
 
 // Добавляем новые действия для обработки движения игрока влево и вправо
@@ -32,11 +34,13 @@ interface GameState {
   playerY: number;
   playerVelocity: number;
   platforms: Platform[];
+  platformsWidth: number;
+  platformsHeight: number;
   score: number;
   gameOver: boolean;
   direction: 'left' | 'right' | null;
   cameraLift: number;
-  lastPlatformSide: 'left' | 'right' | null;
+  // lastPlatformSide: 'left' | 'right' | null;
 }
 
 const initialState: GameState = {
@@ -47,15 +51,25 @@ const initialState: GameState = {
   playerX: window.innerWidth / 2,
   playerY: window.innerHeight / 1.7,
   playerVelocity: 0,
-  platforms: [],
+  platforms: [
+    {
+      id: uuidv4(),
+      x: window.innerWidth / 2,
+      y: window.innerHeight - 100,
+      width: 108,
+      height: 108,
+    },
+  ],
+  platformsWidth: 108,
+  platformsHeight: 108,
   score: 0,
   gameOver: false,
   direction: null,
   cameraLift: 0,
-  lastPlatformSide: 'right',
+  // lastPlatformSide: 'right',
 };
 
-const gravity = 0.01;
+const gravity = 0.02;
 
 function reducer(state: GameState, action: any): GameState {
   switch (action.type) {
@@ -71,22 +85,41 @@ function reducer(state: GameState, action: any): GameState {
     case 'gameOver':
       return { ...state, gameOver: true };
     case 'addPlatform':
-      const side = state.lastPlatformSide === 'left' ? 'right' : 'left';
-      let x;
-      if (side === 'left') {
-        x = 50 + Math.random() * 100;
-      } else {
-        x = state.dimensions.width - (50 + Math.random() * 100);
+      // initialState.platforms = [];
+
+      if (state.platforms.length < 5) {
+        const randomX = Math.floor(
+          Math.random() * (window.innerWidth - state.platformsWidth)
+        );
+        const randomY = Math.floor(
+          Math.random() * (window.innerHeight - state.platformsHeight)
+        );
+
+        const newPlatform: Platform = {
+          id: uuidv4(),
+          x: randomX,
+          y: randomY,
+          width: state.platformsWidth,
+          height: state.platformsHeight,
+        };
+        return { ...state, platforms: [...state.platforms, newPlatform] };
       }
-      const newPlatform: Platform = {
-        id: uuidv4(),
-        x: x,
-        y: Math.random() * (state.dimensions.height - 100) + state.cameraLift,
-      };
+      // const side = state.lastPlatformSide === 'left' ? 'right' : 'left';
+      // let x;
+      // if (side === 'left') {
+      //   x = 50 + Math.random() * 100;
+      // } else {
+      //   x = state.dimensions.width - (50 + Math.random() * 100);
+      // }
+      // const newPlatform: Platform = {
+      //   id: uuidv4(),
+      //   x: x,
+      //   y: Math.random() * (state.dimensions.height - 100) + state.cameraLift,
+      // };
       return {
         ...state,
-        platforms: [...state.platforms, newPlatform],
-        lastPlatformSide: side,
+        // platforms: [...state.platforms],
+        //   lastPlatformSide: side,
       };
     case 'resetPlatforms':
       return { ...state, platforms: [] };
@@ -205,11 +238,30 @@ const Game: React.FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (!state.gameOver && state.platforms.length < 5) {
+    if (!state.gameOver) {
       console.log('Adding platform due to condition.');
       addPlatform(); // Додаємо платформи, якщо гра триває і їх менше 8
     }
   }, [state.gameOver, state.platforms.length, addPlatform]);
+
+  const addPlatformNew = () => {
+    const randomX = Math.floor(
+      Math.random() * (window.innerWidth - state.platformsWidth)
+    );
+    const randomY = Math.floor(
+      Math.random() * (window.innerHeight - state.platformsHeight)
+    );
+
+    const newPlatform: Platform = {
+      id: uuidv4(),
+      x: randomX,
+      y: randomY,
+      // y: -state.platformsHeight,
+      width: state.platformsWidth,
+      height: state.platformsHeight,
+    };
+    return { ...state, platforms: [...state.platforms, newPlatform] };
+  };
 
   // 18.03 проверка на соприкосновение игрока с платформой
   useEffect(() => {
@@ -249,19 +301,18 @@ const Game: React.FC = () => {
         const playerAbovePlatform = state.playerY < platform.y;
 
         if (playerAbovePlatform) {
-          const newPlatforms = state.platforms.filter(
+          const platformsFilter = state.platforms.filter(
             (p) => p.id !== platform.id
           );
-
-          const newPlatform: Platform = {
-            id: uuidv4(),
-            x: Math.random() * (state.dimensions.width - 100),
-            y: Math.random() * (state.dimensions.height - 100),
-          };
+          // const newPlatform: Platform = {
+          //   id: uuidv4(),
+          //   x: Math.random() * (state.dimensions.width - 100),
+          //   y: Math.random() * (state.dimensions.height - 100),
+          // };
 
           dispatch({
             type: 'update',
-            payload: { platforms: [...newPlatforms, newPlatform] },
+            payload: { platforms: [...platformsFilter] },
           });
 
           const jumpSpeed = -3; // Швидкість стрибка (від'ємне значення для руху вверх)
@@ -302,17 +353,29 @@ const Game: React.FC = () => {
         options={{ backgroundColor: 0x000000, backgroundAlpha: 0 }}
       >
         {!state.gameOver &&
-          state.platforms.map((platform) => (
-            <Sprite
-              image="/bub108pg.png"
-              key={uuidv4()}
-              x={platform.x}
-              y={platform.y}
-              width={108}
-              height={108}
-              anchor={0.5}
-            />
-          ))}
+          state.platforms.map((platform) => {
+            // Проверка, чтобы платформа не выходила за границы экрана
+            const adjustedX = Math.max(
+              platform.width / 2,
+              Math.min(window.innerWidth - platform.width / 2, platform.x)
+            );
+            const adjustedY = Math.max(
+              platform.height / 2,
+              Math.min(window.innerHeight - platform.height / 2, platform.y)
+            );
+
+            return (
+              <Sprite
+                image="/bub108pg.png"
+                key={platform.id}
+                x={adjustedX}
+                y={adjustedY}
+                width={108}
+                height={108}
+                anchor={0.5}
+              />
+            );
+          })}
 
         {!state.gameOver && (
           <Sprite
