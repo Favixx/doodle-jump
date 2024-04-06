@@ -18,7 +18,6 @@ interface Platform {
   height: number;
 }
 
-// Добавляем новые действия для обработки движения игрока влево и вправо
 type ActionType =
   | 'update'
   | 'resize'
@@ -40,7 +39,6 @@ interface GameState {
   gameOver: boolean;
   direction: 'left' | 'right' | null;
   cameraLift: number;
-  // lastPlatformSide: 'left' | 'right' | null;
 }
 
 const initialState: GameState = {
@@ -66,7 +64,6 @@ const initialState: GameState = {
   gameOver: false,
   direction: null,
   cameraLift: 0,
-  // lastPlatformSide: 'right',
 };
 
 const gravity = 0.02;
@@ -85,8 +82,6 @@ function reducer(state: GameState, action: any): GameState {
     case 'gameOver':
       return { ...state, gameOver: true };
     case 'addPlatform':
-      // initialState.platforms = [];
-
       if (state.platforms.length < 5) {
         const randomX = Math.floor(
           Math.random() * (window.innerWidth - state.platformsWidth)
@@ -104,22 +99,9 @@ function reducer(state: GameState, action: any): GameState {
         };
         return { ...state, platforms: [...state.platforms, newPlatform] };
       }
-      // const side = state.lastPlatformSide === 'left' ? 'right' : 'left';
-      // let x;
-      // if (side === 'left') {
-      //   x = 50 + Math.random() * 100;
-      // } else {
-      //   x = state.dimensions.width - (50 + Math.random() * 100);
-      // }
-      // const newPlatform: Platform = {
-      //   id: uuidv4(),
-      //   x: x,
-      //   y: Math.random() * (state.dimensions.height - 100) + state.cameraLift,
-      // };
+
       return {
         ...state,
-        // platforms: [...state.platforms],
-        //   lastPlatformSide: side,
       };
     case 'resetPlatforms':
       return { ...state, platforms: [] };
@@ -137,7 +119,6 @@ const Game: React.FC = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const requestRef = useRef<number>();
 
-  // Обработчики событий для движения влево и вправо
   const handleMoveLeft = () => {
     dispatch({ type: 'moveLeft' });
   };
@@ -147,7 +128,6 @@ const Game: React.FC = () => {
   };
 
   useEffect(() => {
-    // Добавляем слушателей для событий касания
     window.addEventListener('touchstart', handleTouchStart);
     window.addEventListener('touchend', handleTouchEnd);
     return () => {
@@ -156,10 +136,8 @@ const Game: React.FC = () => {
     };
   }, []);
 
-  // Обработка начала касания
   const handleTouchStart = (event: TouchEvent) => {
     const touchX = event.touches[0].clientX;
-    // Определяем, с какой стороны экрана произошло касание и вызываем соответствующий обработчик
     if (touchX < window.innerWidth / 2) {
       handleMoveLeft();
     } else {
@@ -167,9 +145,7 @@ const Game: React.FC = () => {
     }
   };
 
-  // Обработка окончания касания
   const handleTouchEnd = () => {
-    // При окончании касания останавливаем движение игрока
     dispatch({ type: 'update', payload: { direction: null } });
   };
 
@@ -182,20 +158,17 @@ const Game: React.FC = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Модифицируем метод animate для учета текущего направления движения
   useEffect(() => {
     const animate = () => {
       const newVelocity = state.playerVelocity + gravity;
       const newY = state.playerY + newVelocity;
       let newX = state.playerX;
 
-      // Обновляем положение игрока по оси X с учетом текущего направления
       if (state.direction === 'left') {
         newX -= 5;
       } else if (state.direction === 'right') {
         newX += 5;
       }
-      // Перемещаем игрока на противоположную сторону, если он вышел за границы экрана
       if (newX < 0) {
         newX = state.dimensions.width;
       } else if (newX > state.dimensions.width) {
@@ -240,7 +213,7 @@ const Game: React.FC = () => {
   useEffect(() => {
     if (!state.gameOver) {
       console.log('Adding platform due to condition.');
-      addPlatform(); // Додаємо платформи, якщо гра триває і їх менше 8
+      addPlatform();
     }
   }, [state.gameOver, state.platforms.length, addPlatform]);
 
@@ -256,76 +229,59 @@ const Game: React.FC = () => {
       id: uuidv4(),
       x: randomX,
       y: randomY,
-      // y: -state.platformsHeight,
       width: state.platformsWidth,
       height: state.platformsHeight,
     };
     return { ...state, platforms: [...state.platforms, newPlatform] };
   };
 
-  // 18.03 проверка на соприкосновение игрока с платформой
   useEffect(() => {
-    checkCollision(); // Перевірка зіткнення при кожному оновленні стану гравця або платформ
+    checkCollision();
   }, [state.playerX, state.playerY, state.platforms]);
 
   const checkCollision = () => {
-    const playerWidth = 120; // Ширина гравця
-    const playerHeight = 120; // Висота гравця
+    const playerWidth = 120;
+    const playerHeight = 120;
 
-    // Координати границь гравця
     const playerLeft = state.playerX - playerWidth / 2;
     const playerRight = state.playerX + playerWidth / 2;
-    // const playerTop = state.playerY - playerHeight / 2;
     const playerBottom = state.playerY + playerHeight / 2;
 
     state.platforms.forEach((platform) => {
-      const platformWidth = 108; // Ширина платформи
-      const platformHeight = 108; // Висота платформи
+      const platformWidth = 108;
+      const platformHeight = 108;
 
-      // Координати границь платформи
       const platformLeft = platform.x - platformWidth / 2;
       const platformRight = platform.x + platformWidth / 2;
       const platformTop = platform.y - platformHeight / 2;
-      // const platformBottom = platform.y + platformHeight / 2;
 
-      // Перевірка перетину границь гравця і платформи
       if (
         playerRight > platformLeft &&
         playerLeft < platformRight &&
         playerBottom > platformTop &&
         playerBottom - state.playerVelocity < platformTop
       ) {
-        // Якщо є зіткнення, виконуємо необхідні дії, наприклад, змінюємо рахунок, тощо
         console.log('Collision with platform!');
-        // Якщо гравець знаходиться над платформою, то робимо пружинний стрибок
         const playerAbovePlatform = state.playerY < platform.y;
 
         if (playerAbovePlatform) {
           const platformsFilter = state.platforms.filter(
             (p) => p.id !== platform.id
           );
-          // const newPlatform: Platform = {
-          //   id: uuidv4(),
-          //   x: Math.random() * (state.dimensions.width - 100),
-          //   y: Math.random() * (state.dimensions.height - 100),
-          // };
 
           dispatch({
             type: 'update',
             payload: { platforms: [...platformsFilter] },
           });
 
-          const jumpSpeed = -3; // Швидкість стрибка (від'ємне значення для руху вверх)
+          const jumpSpeed = -3;
+          let newPlayerVelocity = jumpSpeed;
+          const gravity = 0.9;
 
-          let newPlayerVelocity = jumpSpeed; // Нова швидкість гравця під час стрибка
-          const gravity = 0.9; // Гравітація
-
-          // Функція для анімації стрибка
           const jump = () => {
             if (newPlayerVelocity < 0) {
-              // Поки гравець рухається вверх
-              const newY = state.playerY + newPlayerVelocity; // Нова вертикальна позиція гравця
-              newPlayerVelocity += gravity; // Збільшуємо швидкість падіння згідно гравітації
+              const newY = state.playerY + newPlayerVelocity;
+              newPlayerVelocity += gravity;
 
               dispatch({
                 type: 'update',
@@ -335,11 +291,11 @@ const Game: React.FC = () => {
                 },
               });
 
-              requestAnimationFrame(jump); // Продовжуємо анімацію стрибка
+              requestAnimationFrame(jump);
             }
           };
 
-          jump(); // Розпочинаємо анімацію стрибка
+          jump();
         }
       }
     });
@@ -354,7 +310,6 @@ const Game: React.FC = () => {
       >
         {!state.gameOver &&
           state.platforms.map((platform) => {
-            // Проверка, чтобы платформа не выходила за границы экрана
             const adjustedX = Math.max(
               platform.width / 2,
               Math.min(window.innerWidth - platform.width / 2, platform.x)
