@@ -4,6 +4,7 @@ import React, { useReducer, useEffect, useRef, useCallback } from 'react';
 import GameOverModal from '../GameOver/GameOverModal';
 import { useRouter } from 'next/navigation';
 import { v4 as uuidv4 } from 'uuid';
+import { platform } from 'process';
 
 interface Dimensions {
   width: number;
@@ -67,6 +68,7 @@ const initialState: GameState = {
 };
 
 const gravity = 0.02;
+const playerMidpointThreshold = window.innerHeight / 2;
 
 function reducer(state: GameState, action: any): GameState {
   switch (action.type) {
@@ -160,8 +162,29 @@ const Game: React.FC = () => {
 
   useEffect(() => {
     const animate = () => {
-      const newVelocity = state.playerVelocity + gravity;
-      const newY = state.playerY + newVelocity;
+      let newVelocity: number = state.playerVelocity + gravity;
+      let newY: number = state.playerY + newVelocity;
+      let cameraLiftAdjustment: number = 0;
+
+      if (newY < playerMidpointThreshold) {
+        cameraLiftAdjustment = playerMidpointThreshold - newY;
+        newY = playerMidpointThreshold;
+        // newVelocity = 0;
+      }
+
+      if (cameraLiftAdjustment !== 0) {
+        dispatch({
+          type: 'update',
+          payload: {
+            cameraLift: state.cameraLift + cameraLiftAdjustment,
+            platforms: state.platforms.map((platform) => ({
+              ...platform,
+              y: platform.y + cameraLiftAdjustment,
+            })),
+          },
+        });
+      }
+
       let newX = state.playerX;
 
       if (state.direction === 'left') {
