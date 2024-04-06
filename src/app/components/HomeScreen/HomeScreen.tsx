@@ -1,14 +1,15 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import Image from "next/image";
-import Link from "next/link";
-import { ScreenContainer } from "../styled/ScreenContainer";
-import useUserContext from "@/hooks/useUserContext";
-import OptionsModal from "../Options/Options";
-import balanceImage from "../../../../public/balance.png";
-import userAvatar from "../../../../public/Avatar.jpg";
-import starImage from "../../../../public/star.gif";
+'use client';
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import Image from 'next/image';
+import Link from 'next/link';
+import { ScreenContainer } from '../styled/ScreenContainer';
+import useUserContext from '@/hooks/useUserContext';
+import OptionsModal from '../Options/Options';
+import BalanceModal from '../BalanceModal/BalanceModal';
+import balanceImage from '../../../../public/balance.png';
+import userAvatar from '../../../../public/Avatar.jpg';
+import starImage from '../../../../public/star.gif';
 // import starImage768 from "../../../../public/star768.png";
 
 // import buttonSmall640 from '../../../../public/buttonSmall_640.png'
@@ -52,7 +53,7 @@ const ButtonContainer = styled.div`
 
 const ButtonSmall = styled.button`
   background-color: transparent;
-  background-image: url("/ButtonSmall.png");
+  background-image: url('/ButtonSmall.png');
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -70,12 +71,12 @@ const ButtonSmall = styled.button`
   @media (min-width: 640px) {
     width: 284px;
     height: 176px;
-    background-image: url("/buttonSmall_640.png");
+    background-image: url('/buttonSmall_640.png');
     font-size: 32px;
   }
   @media (min-width: 768px) {
     font-size: 36px;
-    background-image: url("/ButtonSmallTablet.png");
+    background-image: url('/ButtonSmallTablet.png');
     width: 319px;
     height: 198px;
   }
@@ -85,7 +86,7 @@ const Button = styled.button`
   justify-content: center;
   align-items: center;
   background-color: transparent;
-  background-image: url("/Button.png");
+  background-image: url('/Button.png');
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -100,13 +101,13 @@ const Button = styled.button`
   @media (min-width: 640px) {
     width: 576px;
     height: 208px;
-    background-image: url("/button_640.png");
+    background-image: url('/button_640.png');
     font-size: 32px;
   }
   @media (min-width: 768px) {
     width: 648px;
     height: 234px;
-    background-image: url("/ButtonTablet.png");
+    background-image: url('/ButtonTablet.png');
     font-size: 36px;
   }
 `;
@@ -137,6 +138,7 @@ const HomeScreen = () => {
     181, 176,
   ]);
   const [showOptionsModal, setShowOptionsModal] = useState(false); // Состояние для отображения модального окна
+  const [showBalanceModal, setShowBalanceModal] = useState(false); // Состояние для отображения модального окна
 
   const { user, updateUser } = useUserContext();
 
@@ -157,15 +159,15 @@ const HomeScreen = () => {
       }
     };
     handleResize();
-    window.addEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
 
-    return () => window.removeEventListener("resize", handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   return (
     <ScreenContainer>
       <ContentContainer>
-        <Balance>
+        <Balance onClick={() => setShowBalanceModal(true)}>
           <Image src={balanceImage} width={48} height={60} alt="Balance" />
           {user.balance}
         </Balance>
@@ -192,7 +194,7 @@ const HomeScreen = () => {
           />
         </CharContainer>
         <ButtonsContainer>
-          <Link href={"/game"}>
+          <Link href={'/game'}>
             <Button>Start</Button>
           </Link>
           <ButtonContainer>
@@ -206,6 +208,9 @@ const HomeScreen = () => {
           </ButtonContainer>
         </ButtonsContainer>
       </ContentContainerColumn>
+      {showBalanceModal && (
+        <BalanceModal onClose={() => setShowBalanceModal(false)} />
+      )}
     </ScreenContainer>
   );
 };
