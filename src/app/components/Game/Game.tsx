@@ -4,7 +4,6 @@ import React, { useReducer, useEffect, useRef, useCallback } from 'react';
 import GameOverModal from '../GameOver/GameOverModal';
 import { useRouter } from 'next/navigation';
 import { v4 as uuidv4 } from 'uuid';
-import { platform } from 'process';
 
 interface Dimensions {
   width: number;
@@ -67,7 +66,7 @@ const initialState: GameState = {
   cameraLift: 0,
 };
 
-const gravity = 0.02;
+const gravity = 0.025;
 const playerMidpointThreshold = window.innerHeight / 2;
 
 function reducer(state: GameState, action: any): GameState {
