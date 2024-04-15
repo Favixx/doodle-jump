@@ -84,12 +84,12 @@ function reducer(state: GameState, action: any): GameState {
     case 'gameOver':
       return { ...state, gameOver: true };
     case 'addPlatform':
-      if (state.platforms.length < 5) {
+      if (state.platforms.length < 10) {
         const randomX = Math.floor(
           Math.random() * (window.innerWidth - state.platformsWidth)
         );
         const randomY = Math.floor(
-          Math.random() * (window.innerHeight - state.platformsHeight)
+          state.platforms[state.platforms.length - 1].y - state.platformsHeight
         );
 
         const newPlatform: Platform = {
