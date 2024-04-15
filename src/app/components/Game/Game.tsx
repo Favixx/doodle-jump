@@ -220,6 +220,7 @@ const Game: React.FC = () => {
       state.platforms.forEach((platform) => {
         if (platform.y + platform.height / 2 >= window.innerHeight) {
           dispatch({ type: 'removePlatform', payload: { id: platform.id } });
+          addPlatform();
         }
       });
 
