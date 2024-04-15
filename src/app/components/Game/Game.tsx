@@ -89,7 +89,9 @@ function reducer(state: GameState, action: any): GameState {
           Math.random() * (window.innerWidth - state.platformsWidth)
         );
         const randomY = Math.floor(
-          state.platforms[state.platforms.length - 1].y - state.platformsHeight
+          state.platforms[state.platforms.length - 1].y -
+            state.platformsHeight -
+            50
         );
 
         const newPlatform: Platform = {
@@ -355,7 +357,6 @@ const Game: React.FC = () => {
               platform.height / 2,
               Math.min(window.innerHeight - platform.height / 2, platform.y)
             );
-
             return (
               <Sprite
                 image="/bub108pg.png"
