@@ -105,6 +105,13 @@ function reducer(state: GameState, action: any): GameState {
       return {
         ...state,
       };
+    case 'removePlatform':
+      return {
+        ...state,
+        platforms: state.platforms.filter(
+          (platform) => platform.y + platform.height / 2 < window.innerHeight
+        ),
+      };
     case 'resetPlatforms':
       return { ...state, platforms: [] };
     case 'moveLeft':
@@ -210,6 +217,11 @@ const Game: React.FC = () => {
           },
         });
       }
+      state.platforms.forEach((platform) => {
+        if (platform.y + platform.height / 2 >= window.innerHeight) {
+          dispatch({ type: 'removePlatform', payload: { id: platform.id } });
+        }
+      });
 
       requestRef.current = requestAnimationFrame(animate);
     };
@@ -222,6 +234,7 @@ const Game: React.FC = () => {
     state.playerX,
     state.dimensions.height,
     state.direction,
+    dispatch,
   ]);
 
   const handleModalClose = () => {
