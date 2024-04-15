@@ -292,7 +292,7 @@ const Game: React.FC = () => {
 
       const platformLeft = platform.x - platformWidth / 2;
       const platformRight = platform.x + platformWidth / 2;
-      const platformTop = platform.y - platformHeight / 2;
+      const platformTop = platform.y - platformHeight / 2 + state.cameraLift; // Додано cameraLift
 
       if (
         playerRight > platformLeft &&
@@ -301,7 +301,8 @@ const Game: React.FC = () => {
         playerBottom - state.playerVelocity < platformTop
       ) {
         console.log('Collision with platform!');
-        const playerAbovePlatform = state.playerY < platform.y;
+        const playerAbovePlatform =
+          state.playerY < platform.y + state.cameraLift; // Додано cameraLift
 
         if (playerAbovePlatform) {
           const platformsFilter = state.platforms.filter(
@@ -353,21 +354,23 @@ const Game: React.FC = () => {
               platform.width / 2,
               Math.min(window.innerWidth - platform.width / 2, platform.x)
             );
-            const adjustedY = Math.max(
-              platform.height / 2,
-              Math.min(window.innerHeight - platform.height / 2, platform.y)
-            );
-            return (
-              <Sprite
-                image="/bub108pg.png"
-                key={platform.id}
-                x={adjustedX}
-                y={adjustedY}
-                width={108}
-                height={108}
-                anchor={0.5}
-              />
-            );
+            const adjustedY = platform.y + state.cameraLift; // Додано cameraLift для коригування позиції Y
+
+            // Тільки відображати платформу, якщо її координата Y менше висоти екрану і більше 0
+            if (adjustedY < window.innerHeight) {
+              return (
+                <Sprite
+                  image="/bub108pg.png"
+                  key={platform.id}
+                  x={adjustedX}
+                  y={adjustedY}
+                  width={108}
+                  height={108}
+                  anchor={0.5}
+                />
+              );
+            }
+            return null; // Не відображати, якщо платформа за межами екрану
           })}
 
         {!state.gameOver && (
