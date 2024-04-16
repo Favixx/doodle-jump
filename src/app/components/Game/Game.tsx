@@ -3,9 +3,8 @@ import { Sprite, Stage } from '@pixi/react';
 import React, { useReducer, useEffect, useRef, useCallback } from 'react';
 import GameOverModal from '../GameOver/GameOverModal';
 import { useRouter } from 'next/navigation';
-import { v4 as uuidv4 } from 'uuid';
 import reducer from '@/utils/reducer';
-import { GameState } from '@/utils/types';
+
 import {
   GRAVITY,
   PLATFORM_HEIGHT,
@@ -13,34 +12,12 @@ import {
   PLAYER_HEIGHT,
   PLAYER_MIDPOINT_THRESOLD,
   PLAYER_WIDTH,
+  INITIAL_STATE,
 } from '@/utils/constants';
-
-const initialState: GameState = {
-  dimensions: {
-    width: window.innerWidth,
-    height: window.innerHeight,
-  },
-  playerX: window.innerWidth / 2,
-  playerY: window.innerHeight / 1.7,
-  playerVelocity: 0,
-  platforms: [
-    {
-      id: uuidv4(),
-      x: window.innerWidth / 2,
-      y: window.innerHeight - 100,
-      width: 108,
-      height: 108,
-    },
-  ],
-  score: 0,
-  gameOver: false,
-  direction: null,
-  cameraLift: 0,
-};
 
 const Game: React.FC = () => {
   const router = useRouter();
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
   const requestRef = useRef<number>();
 
   const handleMoveLeft = () => {
@@ -131,7 +108,6 @@ const Game: React.FC = () => {
           },
         });
       }
-      console.log(state.platforms);
       !state.gameOver &&
         state.platforms.forEach((platform) => {
           if (platform.y + platform.height / 2 >= window.innerHeight) {
@@ -164,7 +140,6 @@ const Game: React.FC = () => {
 
   useEffect(() => {
     if (!state.gameOver) {
-      console.log('Adding platform due to condition.');
       addPlatform();
     }
   }, [state.gameOver, state.platforms.length, addPlatform]);
@@ -195,7 +170,6 @@ const Game: React.FC = () => {
         playerBottom > platformTop &&
         playerBottom - state.playerVelocity < platformTop
       ) {
-        console.log('Collision with platform!');
         const playerAbovePlatform =
           state.playerY < platform.y + state.cameraLift;
 
@@ -248,7 +222,7 @@ const Game: React.FC = () => {
             if (adjustedY < window.innerHeight) {
               return (
                 <Sprite
-                  image="/bub108pg.png"
+                  image='/bub108pg.png'
                   key={platform.id}
                   x={adjustedX}
                   y={adjustedY}
@@ -265,7 +239,7 @@ const Game: React.FC = () => {
           <Sprite
             x={state.playerX}
             y={state.playerY}
-            image="/star320.png"
+            image='/star320.png'
             width={PLAYER_WIDTH}
             height={PLAYER_HEIGHT}
             anchor={0.5}

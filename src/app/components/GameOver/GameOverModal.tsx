@@ -1,37 +1,13 @@
-import React from "react";
-import styled from "styled-components";
+import {
+  CloseButton,
+  ModalContainer,
+  ModalContent,
+} from '@/app/assets/GameOverModal';
+import React from 'react';
 
 interface GameOverModalProps {
   onClose: () => void;
 }
-
-const ModalContainer = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-`;
-
-const ModalContent = styled.div`
-  background-color: #ffffff;
-  padding: 20px;
-  border-radius: 8px;
-`;
-
-const CloseButton = styled.button`
-  background-color: #ff0000;
-  color: #ffffff;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
-  cursor: pointer;
-`;
 
 const GameOverModal: React.FC<GameOverModalProps> = ({ onClose }) => {
   return (
