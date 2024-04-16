@@ -4,42 +4,16 @@ import React, { useReducer, useEffect, useRef, useCallback } from 'react';
 import GameOverModal from '../GameOver/GameOverModal';
 import { useRouter } from 'next/navigation';
 import { v4 as uuidv4 } from 'uuid';
-
-interface Dimensions {
-  width: number;
-  height: number;
-}
-
-interface Platform {
-  id: string;
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
-
-type ActionType =
-  | 'update'
-  | 'resize'
-  | 'gameOver'
-  | 'addPlatform'
-  | 'resetPlatforms'
-  | 'moveLeft'
-  | 'moveRight';
-
-interface GameState {
-  dimensions: Dimensions;
-  playerX: number;
-  playerY: number;
-  playerVelocity: number;
-  platforms: Platform[];
-  platformsWidth: number;
-  platformsHeight: number;
-  score: number;
-  gameOver: boolean;
-  direction: 'left' | 'right' | null;
-  cameraLift: number;
-}
+import reducer from '@/utils/reducer';
+import { GameState } from '@/utils/types';
+import {
+  GRAVITY,
+  PLATFORM_HEIGHT,
+  PLATFORM_WIDTH,
+  PLAYER_HEIGHT,
+  PLAYER_MIDPOINT_THRESOLD,
+  PLAYER_WIDTH,
+} from '@/utils/constants';
 
 const initialState: GameState = {
   dimensions: {
@@ -58,71 +32,11 @@ const initialState: GameState = {
       height: 108,
     },
   ],
-  platformsWidth: 108,
-  platformsHeight: 108,
   score: 0,
   gameOver: false,
   direction: null,
   cameraLift: 0,
 };
-
-const gravity = 0.025;
-const playerMidpointThreshold = window.innerHeight / 2;
-
-function reducer(state: GameState, action: any): GameState {
-  switch (action.type) {
-    case 'update':
-      return { ...state, ...action.payload };
-    case 'resize':
-      return {
-        ...state,
-        dimensions: { width: window.innerWidth, height: window.innerHeight },
-        playerX: window.innerWidth / 2,
-        playerY: window.innerHeight / 1.7,
-      };
-    case 'gameOver':
-      return { ...state, gameOver: true };
-    case 'addPlatform':
-      if (state.platforms.length < 10) {
-        const randomX = Math.floor(
-          Math.random() * (window.innerWidth - state.platformsWidth)
-        );
-        const randomY = Math.floor(
-          state.platforms[state.platforms.length - 1].y -
-            state.platformsHeight -
-            50
-        );
-
-        const newPlatform: Platform = {
-          id: uuidv4(),
-          x: randomX,
-          y: randomY,
-          width: state.platformsWidth,
-          height: state.platformsHeight,
-        };
-        return { ...state, platforms: [...state.platforms, newPlatform] };
-      }
-
-      return {
-        ...state,
-      };
-    case 'removePlatform':
-      return {
-        ...state,
-        platforms: state.platforms.filter(
-          (platform) => platform.y + platform.height / 2 < window.innerHeight
-        ),
-      };
-    case 'resetPlatforms':
-      return { ...state, platforms: [] };
-    case 'moveLeft':
-      return { ...state, direction: 'left' };
-    case 'moveRight':
-      return { ...state, direction: 'right' };
-    default:
-      return state;
-  }
-}
 
 const Game: React.FC = () => {
   const router = useRouter();
@@ -147,7 +61,7 @@ const Game: React.FC = () => {
   }, []);
 
   const handleTouchStart = (event: TouchEvent) => {
-    const touchX = event.touches[0].clientX;
+    const touchX: number = event.touches[0].clientX;
     if (touchX < window.innerWidth / 2) {
       handleMoveLeft();
     } else {
@@ -167,17 +81,15 @@ const Game: React.FC = () => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
   useEffect(() => {
     const animate = () => {
-      let newVelocity: number = state.playerVelocity + gravity;
+      let newVelocity: number = state.playerVelocity + GRAVITY;
       let newY: number = state.playerY + newVelocity;
       let cameraLiftAdjustment: number = 0;
 
-      if (newY < playerMidpointThreshold) {
-        cameraLiftAdjustment = playerMidpointThreshold - newY;
-        newY = playerMidpointThreshold;
-        // newVelocity = 0;
+      if (newY < PLAYER_MIDPOINT_THRESOLD) {
+        cameraLiftAdjustment = PLAYER_MIDPOINT_THRESOLD - newY;
+        newY = PLAYER_MIDPOINT_THRESOLD;
       }
 
       if (cameraLiftAdjustment !== 0) {
@@ -200,11 +112,12 @@ const Game: React.FC = () => {
       } else if (state.direction === 'right') {
         newX += 5;
       }
-      if (newX < 0) {
-        newX = state.dimensions.width;
-      } else if (newX > state.dimensions.width) {
-        newX = 0;
-      }
+      newX =
+        newX < 0
+          ? state.dimensions.width
+          : newX > state.dimensions.width
+          ? 0
+          : newX;
 
       if (newY > state.dimensions.height) {
         dispatch({ type: 'gameOver' });
@@ -218,14 +131,15 @@ const Game: React.FC = () => {
           },
         });
       }
-      state.platforms.forEach((platform) => {
-        if (platform.y + platform.height / 2 >= window.innerHeight) {
-          dispatch({ type: 'removePlatform', payload: { id: platform.id } });
-          addPlatform();
-        }
-      });
-
-      requestRef.current = requestAnimationFrame(animate);
+      console.log(state.platforms);
+      !state.gameOver &&
+        state.platforms.forEach((platform) => {
+          if (platform.y + platform.height / 2 >= window.innerHeight) {
+            dispatch({ type: 'removePlatform', payload: { id: platform.id } });
+            addPlatform();
+          }
+        });
+      !state.gameOver && (requestRef.current = requestAnimationFrame(animate));
     };
 
     requestRef.current = requestAnimationFrame(animate);
@@ -255,24 +169,6 @@ const Game: React.FC = () => {
     }
   }, [state.gameOver, state.platforms.length, addPlatform]);
 
-  const addPlatformNew = () => {
-    const randomX = Math.floor(
-      Math.random() * (window.innerWidth - state.platformsWidth)
-    );
-    const randomY = Math.floor(
-      Math.random() * (window.innerHeight - state.platformsHeight)
-    );
-
-    const newPlatform: Platform = {
-      id: uuidv4(),
-      x: randomX,
-      y: randomY,
-      width: state.platformsWidth,
-      height: state.platformsHeight,
-    };
-    return { ...state, platforms: [...state.platforms, newPlatform] };
-  };
-
   useEffect(() => {
     checkCollision();
   }, [state.playerX, state.playerY, state.platforms]);
@@ -291,7 +187,7 @@ const Game: React.FC = () => {
 
       const platformLeft = platform.x - platformWidth / 2;
       const platformRight = platform.x + platformWidth / 2;
-      const platformTop = platform.y - platformHeight / 2 + state.cameraLift; // Додано cameraLift
+      const platformTop = platform.y - platformHeight / 2 + state.cameraLift;
 
       if (
         playerRight > platformLeft &&
@@ -301,31 +197,25 @@ const Game: React.FC = () => {
       ) {
         console.log('Collision with platform!');
         const playerAbovePlatform =
-          state.playerY < platform.y + state.cameraLift; // Додано cameraLift
+          state.playerY < platform.y + state.cameraLift;
 
         if (playerAbovePlatform) {
-          const platformsFilter = state.platforms.filter(
-            (p) => p.id !== platform.id
-          );
-
           dispatch({
-            type: 'update',
-            payload: { platforms: [...platformsFilter] },
+            type: 'removePlatform',
+            payload: { id: platform.id },
           });
 
           const jumpSpeed = -3;
           let newPlayerVelocity = jumpSpeed;
-          const gravity = 0.9;
 
           const jump = () => {
             if (newPlayerVelocity < 0) {
-              const newY = state.playerY + newPlayerVelocity;
-              newPlayerVelocity += gravity;
+              newPlayerVelocity += GRAVITY;
 
               dispatch({
                 type: 'update',
                 payload: {
-                  playerVelocity: -3,
+                  playerVelocity: newPlayerVelocity,
                   playerY: platformTop - playerHeight / 2,
                 },
               });
@@ -353,9 +243,8 @@ const Game: React.FC = () => {
               platform.width / 2,
               Math.min(window.innerWidth - platform.width / 2, platform.x)
             );
-            const adjustedY = platform.y + state.cameraLift; // Додано cameraLift для коригування позиції Y
+            const adjustedY = platform.y + state.cameraLift;
 
-            // Тільки відображати платформу, якщо її координата Y менше висоти екрану і більше 0
             if (adjustedY < window.innerHeight) {
               return (
                 <Sprite
@@ -363,13 +252,13 @@ const Game: React.FC = () => {
                   key={platform.id}
                   x={adjustedX}
                   y={adjustedY}
-                  width={108}
-                  height={108}
+                  width={PLATFORM_WIDTH}
+                  height={PLATFORM_HEIGHT}
                   anchor={0.5}
                 />
               );
             }
-            return null; // Не відображати, якщо платформа за межами екрану
+            return null;
           })}
 
         {!state.gameOver && (
@@ -377,8 +266,8 @@ const Game: React.FC = () => {
             x={state.playerX}
             y={state.playerY}
             image="/star320.png"
-            width={120}
-            height={120}
+            width={PLAYER_WIDTH}
+            height={PLAYER_HEIGHT}
             anchor={0.5}
           />
         )}

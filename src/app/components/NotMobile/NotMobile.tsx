@@ -1,6 +1,5 @@
-import React from "react";
-import { ScreenContainer } from "../styled/ScreenContainer";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
 const Heading = styled.h1`
   font-size: 5vw;
