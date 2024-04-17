@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Sprite, Stage } from '@pixi/react';
+import { AnimatedSprite, Sprite, Stage } from '@pixi/react';
 import GameOverModal from '../GameOver/GameOverModal';
 import { useRouter } from 'next/navigation';
 import { animate, checkCollision } from '@/utils/gameUtils';
@@ -7,6 +7,7 @@ import { Platform } from '@/utils/types';
 import { useGameReducer } from '@/hooks/useGameReducer';
 import { handleTouchStart, handleTouchEnd } from '@/utils/gameControls';
 import {
+  BUBBLE_FRAMES,
   PLATFORM_HEIGHT,
   PLATFORM_WIDTH,
   PLAYER_HEIGHT,
@@ -70,11 +71,20 @@ const Game: React.FC = () => {
 
             if (adjustedY < window.innerHeight) {
               return (
-                <Sprite
-                  image="/bub108pg.png"
+                <AnimatedSprite
                   key={platform.id}
+                  isPlaying={platform.isPlaying}
                   x={adjustedX}
                   y={adjustedY}
+                  images={BUBBLE_FRAMES}
+                  animationSpeed={1}
+                  loop={false}
+                  onComplete={() =>
+                    dispatch({
+                      type: 'removePlatform',
+                      payload: { id: platform.id },
+                    })
+                  }
                   width={PLATFORM_WIDTH}
                   height={PLATFORM_HEIGHT}
                   anchor={0.5}

@@ -6,6 +6,14 @@ export const PLATFORM_WIDTH: number = 108;
 export const PLATFORM_HEIGHT: number = 108;
 export const PLAYER_WIDTH: number = 120;
 export const PLAYER_HEIGHT: number = 120;
+export const BUBBLE_FRAMES: string[] = [
+  '/bubble/bubble_frame_1.png',
+  '/bubble/bubble_frame_2.png',
+  '/bubble/bubble_frame_3.png',
+  '/bubble/bubble_frame_4.png',
+  '/bubble/bubble_frame_5.png',
+  '/bubble/bubble_frame_6.png',
+];
 export const INITIAL_STATE: GameState = {
   dimensions: {
     width: window.innerWidth,
@@ -19,6 +27,7 @@ export const INITIAL_STATE: GameState = {
       id: uuidv4(),
       x: window.innerWidth / 2,
       y: window.innerHeight - 100,
+      isPlaying: false,
       width: 108,
       height: 108,
     },

@@ -9,6 +9,7 @@ export interface Platform {
   y: number;
   width: number;
   height: number;
+  isPlaying: boolean;
 }
 
 export type Action =
@@ -19,7 +20,8 @@ export type Action =
   | { type: 'removePlatform'; payload: { id: string } }
   | { type: 'resetPlatforms' }
   | { type: 'moveLeft' }
-  | { type: 'moveRight' };
+  | { type: 'moveRight' }
+  | { type: 'startExplosion'; payload: { id: string } };
 
 export interface GameState {
   dimensions: Dimensions;

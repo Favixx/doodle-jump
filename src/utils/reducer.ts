@@ -28,6 +28,7 @@ export default function reducer(state: GameState, action: any): GameState {
           id: uuidv4(),
           x: randomX,
           y: randomY,
+          isPlaying: false,
           width: PLATFORM_WIDTH,
           height: PLATFORM_HEIGHT,
         };
@@ -36,6 +37,15 @@ export default function reducer(state: GameState, action: any): GameState {
 
       return {
         ...state,
+      };
+    case 'startExplosion':
+      return {
+        ...state,
+        platforms: state.platforms.map((platform) =>
+          platform.id === action.payload.id
+            ? { ...platform, isPlaying: true }
+            : platform
+        ),
       };
     case 'removePlatform':
       const { id } = action.payload;
