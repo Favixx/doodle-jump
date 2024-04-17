@@ -11,14 +11,15 @@ export interface Platform {
   height: number;
 }
 
-export type ActionType =
-  | 'update'
-  | 'resize'
-  | 'gameOver'
-  | 'addPlatform'
-  | 'resetPlatforms'
-  | 'moveLeft'
-  | 'moveRight';
+export type Action =
+  | { type: 'update'; payload: Partial<GameState> }
+  | { type: 'resize' }
+  | { type: 'gameOver' }
+  | { type: 'addPlatform' }
+  | { type: 'removePlatform'; payload: { id: string } }
+  | { type: 'resetPlatforms' }
+  | { type: 'moveLeft' }
+  | { type: 'moveRight' };
 
 export interface GameState {
   dimensions: Dimensions;
@@ -30,4 +31,8 @@ export interface GameState {
   gameOver: boolean;
   direction: 'left' | 'right' | null;
   cameraLift: number;
+}
+
+export interface OptionsModalProps {
+  onClose: () => void;
 }

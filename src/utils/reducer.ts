@@ -21,7 +21,7 @@ export default function reducer(state: GameState, action: any): GameState {
           Math.random() * (window.innerWidth - PLATFORM_WIDTH)
         );
         const randomY = Math.floor(
-          state.platforms[state.platforms.length - 1].y - PLATFORM_HEIGHT - 50
+          state.platforms[state.platforms.length - 1].y - PLATFORM_HEIGHT - 60
         );
 
         const newPlatform: Platform = {

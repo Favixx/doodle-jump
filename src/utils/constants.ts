@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import { GameState } from './types';
-export const GRAVITY: number = 0.025;
+export const GRAVITY: number = 0.024;
 export const PLAYER_MIDPOINT_THRESOLD: number = window.innerHeight / 2;
 export const PLATFORM_WIDTH: number = 108;
 export const PLATFORM_HEIGHT: number = 108;

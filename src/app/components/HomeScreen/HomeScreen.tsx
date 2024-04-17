@@ -19,12 +19,6 @@ import {
   ContentContainer,
   ContentContainerColumn,
 } from '@/app/assets/HomeScreen';
-// import {ContentContainer} from
-
-// import starImage768 from "../../../../public/star768.png";
-
-// import buttonSmall640 from '../../../../public/buttonSmall_640.png'
-// import button640 from '../../../../public/button_640.png'
 
 const HomeScreen = () => {
   // Приклад використання контексту
@@ -35,7 +29,7 @@ const HomeScreen = () => {
   const [currentStarSizes, setCurrentStarSizes] = useState<number[]>([
     181, 176,
   ]);
-  const [showOptionsModal, setShowOptionsModal] = useState(false); // Состояние для отображения модального окна
+  const [showOptionsModal, setShowOptionsModal] = useState(false);
 
   const { user, updateUser } = useUserContext();
 
