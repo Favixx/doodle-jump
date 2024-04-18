@@ -38,3 +38,7 @@ export interface GameState {
 export interface OptionsModalProps {
   onClose: () => void;
 }
+
+export interface BalanceModalProps {
+  onClose: () => void;
+}
