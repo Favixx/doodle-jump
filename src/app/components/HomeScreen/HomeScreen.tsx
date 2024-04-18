@@ -19,6 +19,7 @@ import {
   ContentContainer,
   ContentContainerColumn,
 } from '@/app/assets/HomeScreen';
+import BalanceModal from '../BalanceModal/BalanceModal';
 
 const HomeScreen = () => {
   // Приклад використання контексту
@@ -29,7 +30,8 @@ const HomeScreen = () => {
   const [currentStarSizes, setCurrentStarSizes] = useState<number[]>([
     181, 176,
   ]);
-  const [showOptionsModal, setShowOptionsModal] = useState(false);
+  const [showOptionsModal, setShowOptionsModal] = useState(false); // Состояние для отображения модального окна
+  const [showBalanceModal, setShowBalanceModal] = useState(false); // Состояние для отображения модального окна
 
   const { user, updateUser } = useUserContext();
 
@@ -52,8 +54,8 @@ const HomeScreen = () => {
   return (
     <ScreenContainer>
       <ContentContainer>
-        <Balance>
-          <Image src={balanceImage} width={48} height={60} alt='Balance' />
+        <Balance onClick={() => setShowBalanceModal(true)}>
+          <Image src={balanceImage} width={48} height={60} alt="Balance" />
           {user.balance}
         </Balance>
         <AvatarContainer>
@@ -62,7 +64,7 @@ const HomeScreen = () => {
           ) : (
             <Image
               src={userAvatar}
-              alt='Player Avatar'
+              alt="Player Avatar"
               width={75}
               height={75}
             />
@@ -73,7 +75,7 @@ const HomeScreen = () => {
         <CharContainer>
           <Image
             src={starImage}
-            alt='Character Skin'
+            alt="Character Skin"
             width={currentStarSizes[0]}
             height={currentStarSizes[1]}
           />
@@ -93,6 +95,9 @@ const HomeScreen = () => {
           </ButtonContainer>
         </ButtonsContainer>
       </ContentContainerColumn>
+      {showBalanceModal && (
+        <BalanceModal onClose={() => setShowBalanceModal(false)} />
+      )}
     </ScreenContainer>
   );
 };
