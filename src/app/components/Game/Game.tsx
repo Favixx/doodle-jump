@@ -1,177 +1,35 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { Sprite, Stage } from '@pixi/react';
-import React, { useReducer, useEffect, useRef, useCallback } from 'react';
+import React, { useEffect, useRef } from 'react';
+import { AnimatedSprite, Sprite, Stage } from '@pixi/react';
 import GameOverModal from '../GameOver/GameOverModal';
 import { useRouter } from 'next/navigation';
-import { v4 as uuidv4 } from 'uuid';
-
-interface Dimensions {
-  width: number;
-  height: number;
-}
-
-interface Platform {
-  id: string;
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
-
-// Добавляем новые действия для обработки движения игрока влево и вправо
-type ActionType =
-  | 'update'
-  | 'resize'
-  | 'gameOver'
-  | 'addPlatform'
-  | 'resetPlatforms'
-  | 'moveLeft'
-  | 'moveRight';
-
-interface GameState {
-  dimensions: Dimensions;
-  playerX: number;
-  playerY: number;
-  playerVelocity: number;
-  platforms: Platform[];
-  platformsWidth: number;
-  platformsHeight: number;
-  score: number;
-  gameOver: boolean;
-  direction: 'left' | 'right' | null;
-  cameraLift: number;
-  // lastPlatformSide: 'left' | 'right' | null;
-}
-
-const initialState: GameState = {
-  dimensions: {
-    width: window.innerWidth,
-    height: window.innerHeight,
-  },
-  playerX: window.innerWidth / 2,
-  playerY: window.innerHeight / 1.7,
-  playerVelocity: 0,
-  platforms: [
-    {
-      id: uuidv4(),
-      x: window.innerWidth / 2,
-      y: window.innerHeight - 100,
-      width: 108,
-      height: 108,
-    },
-  ],
-  platformsWidth: 108,
-  platformsHeight: 108,
-  score: 0,
-  gameOver: false,
-  direction: null,
-  cameraLift: 0,
-  // lastPlatformSide: 'right',
-};
-
-const gravity = 0.02;
-
-function reducer(state: GameState, action: any): GameState {
-  switch (action.type) {
-    case 'update':
-      return { ...state, ...action.payload };
-    case 'resize':
-      return {
-        ...state,
-        dimensions: { width: window.innerWidth, height: window.innerHeight },
-        playerX: window.innerWidth / 2,
-        playerY: window.innerHeight / 1.7,
-      };
-    case 'gameOver':
-      return { ...state, gameOver: true };
-    case 'addPlatform':
-      // initialState.platforms = [];
-
-      if (state.platforms.length < 5) {
-        const randomX = Math.floor(
-          Math.random() * (window.innerWidth - state.platformsWidth)
-        );
-        const randomY = Math.floor(
-          Math.random() * (window.innerHeight - state.platformsHeight)
-        );
-
-        const newPlatform: Platform = {
-          id: uuidv4(),
-          x: randomX,
-          y: randomY,
-          width: state.platformsWidth,
-          height: state.platformsHeight,
-        };
-        return { ...state, platforms: [...state.platforms, newPlatform] };
-      }
-      // const side = state.lastPlatformSide === 'left' ? 'right' : 'left';
-      // let x;
-      // if (side === 'left') {
-      //   x = 50 + Math.random() * 100;
-      // } else {
-      //   x = state.dimensions.width - (50 + Math.random() * 100);
-      // }
-      // const newPlatform: Platform = {
-      //   id: uuidv4(),
-      //   x: x,
-      //   y: Math.random() * (state.dimensions.height - 100) + state.cameraLift,
-      // };
-      return {
-        ...state,
-        // platforms: [...state.platforms],
-        //   lastPlatformSide: side,
-      };
-    case 'resetPlatforms':
-      return { ...state, platforms: [] };
-    case 'moveLeft':
-      return { ...state, direction: 'left' };
-    case 'moveRight':
-      return { ...state, direction: 'right' };
-    default:
-      return state;
-  }
-}
+import { animate, checkCollision } from '@/utils/gameUtils';
+import { Platform } from '@/utils/types';
+import { useGameReducer } from '@/hooks/useGameReducer';
+import { handleTouchStart, handleTouchEnd } from '@/utils/gameControls';
+import {
+  BUBBLE_FRAMES,
+  PLATFORM_HEIGHT,
+  PLATFORM_WIDTH,
+  PLAYER_HEIGHT,
+  PLAYER_WIDTH,
+} from '@/utils/constants';
 
 const Game: React.FC = () => {
+  const { state, dispatch } = useGameReducer();
   const router = useRouter();
-  const [state, dispatch] = useReducer(reducer, initialState);
   const requestRef = useRef<number>();
 
-  // Обработчики событий для движения влево и вправо
-  const handleMoveLeft = () => {
-    dispatch({ type: 'moveLeft' });
-  };
-
-  const handleMoveRight = () => {
-    dispatch({ type: 'moveRight' });
-  };
-
   useEffect(() => {
-    // Добавляем слушателей для событий касания
-    window.addEventListener('touchstart', handleTouchStart);
-    window.addEventListener('touchend', handleTouchEnd);
+    const touchStartHandler = (e: TouchEvent) => handleTouchStart(e, dispatch);
+    const touchEndHandler = () => handleTouchEnd(dispatch);
+
+    window.addEventListener('touchstart', touchStartHandler);
+    window.addEventListener('touchend', touchEndHandler);
     return () => {
-      window.removeEventListener('touchstart', handleTouchStart);
-      window.removeEventListener('touchend', handleTouchEnd);
+      window.removeEventListener('touchstart', touchStartHandler);
+      window.removeEventListener('touchend', touchEndHandler);
     };
-  }, []);
-
-  // Обработка начала касания
-  const handleTouchStart = (event: TouchEvent) => {
-    const touchX = event.touches[0].clientX;
-    // Определяем, с какой стороны экрана произошло касание и вызываем соответствующий обработчик
-    if (touchX < window.innerWidth / 2) {
-      handleMoveLeft();
-    } else {
-      handleMoveRight();
-    }
-  };
-
-  // Обработка окончания касания
-  const handleTouchEnd = () => {
-    // При окончании касания останавливаем движение игрока
-    dispatch({ type: 'update', payload: { direction: null } });
-  };
+  }, [dispatch]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -180,169 +38,20 @@ const Game: React.FC = () => {
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [dispatch]);
 
-  // Модифицируем метод animate для учета текущего направления движения
   useEffect(() => {
-    const animate = () => {
-      const newVelocity = state.playerVelocity + gravity;
-      const newY = state.playerY + newVelocity;
-      let newX = state.playerX;
-
-      // Обновляем положение игрока по оси X с учетом текущего направления
-      if (state.direction === 'left') {
-        newX -= 5;
-      } else if (state.direction === 'right') {
-        newX += 5;
-      }
-      // Перемещаем игрока на противоположную сторону, если он вышел за границы экрана
-      if (newX < 0) {
-        newX = state.dimensions.width;
-      } else if (newX > state.dimensions.width) {
-        newX = 0;
-      }
-
-      if (newY > state.dimensions.height) {
-        dispatch({ type: 'gameOver' });
-      } else {
-        dispatch({
-          type: 'update',
-          payload: {
-            playerVelocity: newVelocity,
-            playerY: newY,
-            playerX: newX,
-          },
-        });
-      }
-
-      requestRef.current = requestAnimationFrame(animate);
-    };
-
-    requestRef.current = requestAnimationFrame(animate);
+    requestRef.current = requestAnimationFrame(() => animate(state, dispatch));
     return () => cancelAnimationFrame(requestRef.current!);
-  }, [
-    state.playerVelocity,
-    state.playerY,
-    state.playerX,
-    state.dimensions.height,
-    state.direction,
-  ]);
+  }, [state, dispatch]);
+
+  useEffect(() => {
+    checkCollision(state, dispatch);
+  }, [state, dispatch]);
 
   const handleModalClose = () => {
     router.push('/');
     dispatch({ type: 'gameOver', payload: { gameOver: false } });
-  };
-
-  const addPlatform = useCallback(() => {
-    dispatch({ type: 'addPlatform' });
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (!state.gameOver) {
-      console.log('Adding platform due to condition.');
-      addPlatform(); // Додаємо платформи, якщо гра триває і їх менше 8
-    }
-  }, [state.gameOver, state.platforms.length, addPlatform]);
-
-  const addPlatformNew = () => {
-    const randomX = Math.floor(
-      Math.random() * (window.innerWidth - state.platformsWidth)
-    );
-    const randomY = Math.floor(
-      Math.random() * (window.innerHeight - state.platformsHeight)
-    );
-
-    const newPlatform: Platform = {
-      id: uuidv4(),
-      x: randomX,
-      y: randomY,
-      // y: -state.platformsHeight,
-      width: state.platformsWidth,
-      height: state.platformsHeight,
-    };
-    return { ...state, platforms: [...state.platforms, newPlatform] };
-  };
-
-  // 18.03 проверка на соприкосновение игрока с платформой
-  useEffect(() => {
-    checkCollision(); // Перевірка зіткнення при кожному оновленні стану гравця або платформ
-  }, [state.playerX, state.playerY, state.platforms]);
-
-  const checkCollision = () => {
-    const playerWidth = 120; // Ширина гравця
-    const playerHeight = 120; // Висота гравця
-
-    // Координати границь гравця
-    const playerLeft = state.playerX - playerWidth / 2;
-    const playerRight = state.playerX + playerWidth / 2;
-    // const playerTop = state.playerY - playerHeight / 2;
-    const playerBottom = state.playerY + playerHeight / 2;
-
-    state.platforms.forEach((platform) => {
-      const platformWidth = 108; // Ширина платформи
-      const platformHeight = 108; // Висота платформи
-
-      // Координати границь платформи
-      const platformLeft = platform.x - platformWidth / 2;
-      const platformRight = platform.x + platformWidth / 2;
-      const platformTop = platform.y - platformHeight / 2;
-      // const platformBottom = platform.y + platformHeight / 2;
-
-      // Перевірка перетину границь гравця і платформи
-      if (
-        playerRight > platformLeft &&
-        playerLeft < platformRight &&
-        playerBottom > platformTop &&
-        playerBottom - state.playerVelocity < platformTop
-      ) {
-        // Якщо є зіткнення, виконуємо необхідні дії, наприклад, змінюємо рахунок, тощо
-        console.log('Collision with platform!');
-        // Якщо гравець знаходиться над платформою, то робимо пружинний стрибок
-        const playerAbovePlatform = state.playerY < platform.y;
-
-        if (playerAbovePlatform) {
-          const platformsFilter = state.platforms.filter(
-            (p) => p.id !== platform.id
-          );
-          // const newPlatform: Platform = {
-          //   id: uuidv4(),
-          //   x: Math.random() * (state.dimensions.width - 100),
-          //   y: Math.random() * (state.dimensions.height - 100),
-          // };
-
-          dispatch({
-            type: 'update',
-            payload: { platforms: [...platformsFilter] },
-          });
-
-          const jumpSpeed = -3; // Швидкість стрибка (від'ємне значення для руху вверх)
-
-          let newPlayerVelocity = jumpSpeed; // Нова швидкість гравця під час стрибка
-          const gravity = 0.9; // Гравітація
-
-          // Функція для анімації стрибка
-          const jump = () => {
-            if (newPlayerVelocity < 0) {
-              // Поки гравець рухається вверх
-              const newY = state.playerY + newPlayerVelocity; // Нова вертикальна позиція гравця
-              newPlayerVelocity += gravity; // Збільшуємо швидкість падіння згідно гравітації
-
-              dispatch({
-                type: 'update',
-                payload: {
-                  playerVelocity: -3,
-                  playerY: platformTop - playerHeight / 2,
-                },
-              });
-
-              requestAnimationFrame(jump); // Продовжуємо анімацію стрибка
-            }
-          };
-
-          jump(); // Розпочинаємо анімацію стрибка
-        }
-      }
-    });
   };
 
   return (
@@ -353,28 +62,36 @@ const Game: React.FC = () => {
         options={{ backgroundColor: 0x000000, backgroundAlpha: 0 }}
       >
         {!state.gameOver &&
-          state.platforms.map((platform) => {
-            // Проверка, чтобы платформа не выходила за границы экрана
+          state.platforms.map((platform: Platform) => {
             const adjustedX = Math.max(
               platform.width / 2,
               Math.min(window.innerWidth - platform.width / 2, platform.x)
             );
-            const adjustedY = Math.max(
-              platform.height / 2,
-              Math.min(window.innerHeight - platform.height / 2, platform.y)
-            );
+            const adjustedY = platform.y + state.cameraLift;
 
-            return (
-              <Sprite
-                image="/bub108pg.png"
-                key={platform.id}
-                x={adjustedX}
-                y={adjustedY}
-                width={108}
-                height={108}
-                anchor={0.5}
-              />
-            );
+            if (adjustedY < window.innerHeight) {
+              return (
+                <AnimatedSprite
+                  key={platform.id}
+                  isPlaying={platform.isPlaying}
+                  x={adjustedX}
+                  y={adjustedY}
+                  images={BUBBLE_FRAMES}
+                  animationSpeed={1}
+                  loop={false}
+                  onComplete={() =>
+                    dispatch({
+                      type: 'removePlatform',
+                      payload: { id: platform.id },
+                    })
+                  }
+                  width={PLATFORM_WIDTH}
+                  height={PLATFORM_HEIGHT}
+                  anchor={0.5}
+                />
+              );
+            }
+            return null;
           })}
 
         {!state.gameOver && (
@@ -382,8 +99,8 @@ const Game: React.FC = () => {
             x={state.playerX}
             y={state.playerY}
             image="/star320.png"
-            width={120}
-            height={120}
+            width={PLAYER_WIDTH}
+            height={PLAYER_HEIGHT}
             anchor={0.5}
           />
         )}

@@ -1,132 +1,25 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ScreenContainer } from '../styled/ScreenContainer';
+import { ScreenContainer } from '../../assets/ScreenContainer';
 import useUserContext from '@/hooks/useUserContext';
 import OptionsModal from '../Options/Options';
-import BalanceModal from '../BalanceModal/BalanceModal';
 import balanceImage from '../../../../public/balance.png';
 import userAvatar from '../../../../public/Avatar.jpg';
 import starImage from '../../../../public/star.gif';
-// import starImage768 from "../../../../public/star768.png";
-
-// import buttonSmall640 from '../../../../public/buttonSmall_640.png'
-// import button640 from '../../../../public/button_640.png'
-
-const ContentContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-`;
-
-const ContentContainerColumn = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`;
-
-const AvatarContainer = styled.div`
-  border-radius: 50%;
-  width: 75px;
-  height: 75px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-`;
-
-const ButtonsContainer = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  gap: 8px;
-`;
-
-const ButtonSmall = styled.button`
-  background-color: transparent;
-  background-image: url('/ButtonSmall.png');
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-  border: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  /* border-radius: 17px; */
-  /* padding: 50px 10px; */
-  font-size: 24px;
-  width: 142px;
-  height: 88px;
-  color: white;
-  cursor: pointer;
-  @media (min-width: 640px) {
-    width: 284px;
-    height: 176px;
-    background-image: url('/buttonSmall_640.png');
-    font-size: 32px;
-  }
-  @media (min-width: 768px) {
-    font-size: 36px;
-    background-image: url('/ButtonSmallTablet.png');
-    width: 319px;
-    height: 198px;
-  }
-`;
-const Button = styled.button`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: transparent;
-  background-image: url('/Button.png');
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-  border: none;
-  /* border-radius: 20px; */
-  /* padding: 50px 10px; */
-  font-size: 24px;
-  width: 288px;
-  height: 104px;
-  color: white;
-  cursor: pointer;
-  @media (min-width: 640px) {
-    width: 576px;
-    height: 208px;
-    background-image: url('/button_640.png');
-    font-size: 32px;
-  }
-  @media (min-width: 768px) {
-    width: 648px;
-    height: 234px;
-    background-image: url('/ButtonTablet.png');
-    font-size: 36px;
-  }
-`;
-
-const Balance = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  font-size: 32px;
-  color: #fff;
-`;
-
-const CharContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 16px;
-`;
+import {
+  AvatarContainer,
+  Balance,
+  Button,
+  ButtonContainer,
+  ButtonSmall,
+  ButtonsContainer,
+  CharContainer,
+  ContentContainer,
+  ContentContainerColumn,
+} from '@/app/assets/HomeScreen';
+import BalanceModal from '../BalanceModal/BalanceModal';
 
 const HomeScreen = () => {
   // Приклад використання контексту
@@ -144,12 +37,6 @@ const HomeScreen = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      // if (window.innerWidth < 768) {
-      //   setCurrentStarSizes([181, 176]);
-      // } else {
-      //   setCurrentStarSizes([408, 397]);
-      // }
-
       if (window.innerWidth < 640) {
         setCurrentStarSizes([181, 176]);
       } else if (window.innerWidth > 640 && window.innerWidth < 768) {

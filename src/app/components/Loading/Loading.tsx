@@ -1,8 +1,8 @@
-import React from "react";
-import styled, { keyframes } from "styled-components";
-import LoadingBubble from "../../../../public/bubble.gif";
-import Image from "next/image";
-import LoadingText from "./LoadingText";
+import React from 'react';
+import styled from 'styled-components';
+import LoadingBubble from '../../../../public/bubble.gif';
+import Image from 'next/image';
+import LoadingText from './LoadingText';
 
 const SpinnerContainer = styled.div`
   display: flex;
@@ -17,7 +17,7 @@ const LoadingSpinner = () => {
   return (
     <>
       <SpinnerContainer>
-        <Image src={LoadingBubble} width={125} height={125} alt="Loading..." />
+        <Image src={LoadingBubble} width={125} height={125} alt='Loading...' />
         <LoadingText />
       </SpinnerContainer>
     </>
