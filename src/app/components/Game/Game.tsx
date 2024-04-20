@@ -77,7 +77,7 @@ const Game: React.FC = () => {
                   x={adjustedX}
                   y={adjustedY}
                   images={BUBBLE_FRAMES}
-                  animationSpeed={0.6}
+                  animationSpeed={0.5}
                   loop={false}
                   onComplete={() =>
                     dispatch({
