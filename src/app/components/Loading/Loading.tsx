@@ -14,14 +14,14 @@ const SpinnerContainer = styled.div`
 `;
 
 const LoadingSpinner = () => {
-  return (
-    <>
-      <SpinnerContainer>
-        <Image src={LoadingBubble} width={125} height={125} alt='Loading...' />
-        <LoadingText />
-      </SpinnerContainer>
-    </>
-  );
+    return (
+        <>
+            <SpinnerContainer>
+                <Image src={LoadingBubble} width={125} height={125} alt='Loading...' />
+                <LoadingText />
+            </SpinnerContainer>
+        </>
+    );
 };
 
 export default LoadingSpinner;

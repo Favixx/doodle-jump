@@ -4,7 +4,7 @@ import React from "react";
 const Game = dynamic(() => import("../components/Game/Game"), { ssr: false });
 
 const page = () => {
-  return <Game />;
+    return <Game />;
 };
 
 export default page;

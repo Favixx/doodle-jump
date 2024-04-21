@@ -8,32 +8,32 @@ import { useDesktop } from '@/hooks/useDesktop';
 import { GameProvider } from '@/contexts/gameContext';
 
 export default function Home() {
-  const isDesktop = useDesktop();
-  const [isInitialized, setIsInitialized] = useState<boolean>(false);
+    const isDesktop = useDesktop();
+    const [isInitialized, setIsInitialized] = useState<boolean>(false);
 
-  useViewportHeight();
+    useViewportHeight();
 
-  useEffect(() => {
-    const isUsingMobile = () => {
-      setIsInitialized(true);
-    };
+    useEffect(() => {
+        const isUsingMobile = () => {
+            setIsInitialized(true);
+        };
 
-    isUsingMobile();
+        isUsingMobile();
 
-    window.addEventListener('resize', isUsingMobile);
+        window.addEventListener('resize', isUsingMobile);
 
-    return () => {
-      window.removeEventListener('resize', isUsingMobile);
-    };
-  }, []);
+        return () => {
+            window.removeEventListener('resize', isUsingMobile);
+        };
+    }, []);
 
-  if (!isInitialized) {
-    return <LoadingSpinner />;
-  }
+    if (!isInitialized) {
+        return <LoadingSpinner />;
+    }
 
-  return (
-    <GameProvider>
-      <main>{!isDesktop ? <HomeScreen /> : <NotMobile />}</main>
-    </GameProvider>
-  );
+    return (
+        <GameProvider>
+            <main>{!isDesktop ? <HomeScreen /> : <NotMobile />}</main>
+        </GameProvider>
+    );
 }
