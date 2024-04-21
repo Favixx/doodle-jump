@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { AnimatedSprite, Sprite, Stage } from '@pixi/react';
 import GameOverModal from '../GameOver/GameOverModal';
 import { useRouter } from 'next/navigation';
@@ -13,11 +13,26 @@ import {
   PLAYER_HEIGHT,
   PLAYER_WIDTH,
 } from '@/utils/constants';
+import { removePlatform } from '@/utils/actions';
 
 const Game: React.FC = () => {
   const { state, dispatch } = useGameReducer();
   const router = useRouter();
   const requestRef = useRef<number>();
+  const timeoutRefs = useRef<Record<string, number>>({});
+
+  const onCompleteRemovePlatform = useCallback(
+    (platformId: string) => {
+      if (timeoutRefs.current[platformId]) {
+        clearTimeout(timeoutRefs.current[platformId]);
+      }
+      timeoutRefs.current[platformId] = window.setTimeout(() => {
+        removePlatform(dispatch, platformId);
+        delete timeoutRefs.current[platformId];
+      }, 10);
+    },
+    [dispatch]
+  );
 
   useEffect(() => {
     const touchStartHandler = (e: TouchEvent) => handleTouchStart(e, dispatch);
@@ -69,29 +84,26 @@ const Game: React.FC = () => {
             );
             const adjustedY = platform.y + state.cameraLift;
 
-            if (adjustedY < window.innerHeight) {
-              return (
-                <AnimatedSprite
-                  key={platform.id}
-                  isPlaying={platform.isPlaying}
-                  x={adjustedX}
-                  y={adjustedY}
-                  images={BUBBLE_FRAMES}
-                  animationSpeed={0.45}
-                  loop={false}
-                  onComplete={() =>
-                    dispatch({
-                      type: 'removePlatform',
-                      payload: { id: platform.id },
-                    })
-                  }
-                  width={PLATFORM_WIDTH}
-                  height={PLATFORM_HEIGHT}
-                  anchor={0.5}
-                />
-              );
-            }
-            return null;
+            return (
+              <AnimatedSprite
+                key={platform.id}
+                isPlaying={platform.isPlaying}
+                x={adjustedX}
+                y={adjustedY}
+                images={BUBBLE_FRAMES}
+                animationSpeed={0.45}
+                loop={false}
+                onComplete={() => onCompleteRemovePlatform(platform.id)}
+                width={PLATFORM_WIDTH}
+                height={PLATFORM_HEIGHT}
+                // onFrameChange={(sprite: any) => {
+                //   if (sprite.currentFrame === sprite.images?.length - 1) {
+                //     removePlatform(dispatch, platform.id);
+                //   }
+                // }}
+                anchor={0.5}
+              />
+            );
           })}
 
         {!state.gameOver && (

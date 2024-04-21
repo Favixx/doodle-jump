@@ -36,6 +36,9 @@ export const checkCollision = (
 };
 
 export const animate = (state: GameState, dispatch: Dispatch<Action>) => {
+  if (state.platforms.length < 15) {
+    addPlatform(dispatch);
+  }
   let newVelocity: number = state.playerVelocity + GRAVITY;
   let newY: number = state.playerY + newVelocity;
   let cameraLiftAdjustment: number = 0;
@@ -86,13 +89,9 @@ export const animate = (state: GameState, dispatch: Dispatch<Action>) => {
     });
   }
 
-  if (!state.gameOver) {
-    addPlatform(dispatch);
-    state.platforms.forEach((platform: Platform) => {
-      if (platform.y + platform.height / 2 >= window.innerHeight) {
-        dispatch({ type: 'startExplosion', payload: { id: platform.id } });
-        addPlatform(dispatch);
-      }
-    });
-  }
+  state.platforms.forEach((platform: Platform) => {
+    if (platform.y + platform.height / 2 >= window.innerHeight) {
+      dispatch({ type: 'startExplosion', payload: { id: platform.id } });
+    }
+  });
 };

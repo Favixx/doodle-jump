@@ -11,3 +11,6 @@ export const handleMoveRight = (dispatch: Dispatch<any>) => {
 export const addPlatform = (dispatch: Dispatch<any>) => {
   dispatch({ type: 'addPlatform' });
 };
+export const removePlatform = (dispatch: Dispatch<any>, id: string) => {
+  dispatch({ type: 'removePlatform', payload: { id } });
+};

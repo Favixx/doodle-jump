@@ -12,7 +12,7 @@ export const BUBBLE_FRAMES: string[] = [
   '/bubble/bubble_frame_3.png',
   '/bubble/bubble_frame_4.png',
   '/bubble/bubble_frame_5.png',
-  '/bubble/bubble_frame_6.png',
+  // '/bubble/bubble_frame_6.png',
 ];
 export const INITIAL_STATE: GameState = {
   dimensions: {

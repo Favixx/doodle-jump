@@ -16,28 +16,22 @@ export default function reducer(state: GameState, action: any): GameState {
     case 'gameOver':
       return { ...state, gameOver: true };
     case 'addPlatform':
-      if (state.platforms.length < 15) {
-        const randomX = Math.floor(
-          Math.random() * (window.innerWidth - PLATFORM_WIDTH)
-        );
-        const randomY = Math.floor(
-          state.platforms[state.platforms.length - 1].y - PLATFORM_HEIGHT - 60
-        );
+      const randomX = Math.floor(
+        Math.random() * (window.innerWidth - PLATFORM_WIDTH)
+      );
+      const randomY = Math.floor(
+        state.platforms[state.platforms.length - 1].y - PLATFORM_HEIGHT - 60
+      );
 
-        const newPlatform: Platform = {
-          id: uuidv4(),
-          x: randomX,
-          y: randomY,
-          isPlaying: false,
-          width: PLATFORM_WIDTH,
-          height: PLATFORM_HEIGHT,
-        };
-        return { ...state, platforms: [...state.platforms, newPlatform] };
-      }
-
-      return {
-        ...state,
+      const newPlatform: Platform = {
+        id: uuidv4(),
+        x: randomX,
+        y: randomY,
+        isPlaying: false,
+        width: PLATFORM_WIDTH,
+        height: PLATFORM_HEIGHT,
       };
+      return { ...state, platforms: [...state.platforms, newPlatform] };
     case 'startExplosion':
       return {
         ...state,
@@ -49,6 +43,7 @@ export default function reducer(state: GameState, action: any): GameState {
       };
     case 'removePlatform':
       const { id } = action.payload;
+      console.log(id);
       return {
         ...state,
         platforms: state.platforms.filter((platform) => platform.id !== id),
