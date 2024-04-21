@@ -57,7 +57,8 @@ const Game: React.FC = () => {
 
   useEffect(() => {
     requestRef.current = requestAnimationFrame(() => animate(state, dispatch));
-    return () => cancelAnimationFrame(requestRef.current!);
+
+    state.gameOver && cancelAnimationFrame(requestRef.current!);
   }, [state, dispatch]);
 
   useEffect(() => {
