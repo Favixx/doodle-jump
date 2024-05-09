@@ -12,6 +12,7 @@ export interface Platform {
     width: number;
     height: number;
     isPlaying: boolean;
+    hasCoin: boolean;
 }
 
 export type Action =

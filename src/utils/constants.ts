@@ -14,6 +14,14 @@ export const BUBBLE_FRAMES: string[] = [
     '/bubble/bubble_frame_5.png',
     // '/bubble/bubble_frame_6.png',
 ];
+export const COINBUBBLE_FRAMES: string[] = [
+    '/coinbubble/1.png',
+    '/coinbubble/2.png',
+    '/coinbubble/3.png',
+    '/coinbubble/4.png',
+    '/coinbubble/5.png',
+    // '/bubble/bubble_frame_6.png',
+];
 export const INITIAL_STATE: GameState = {
     dimensions: {
         width: window.innerWidth,
@@ -31,6 +39,7 @@ export const INITIAL_STATE: GameState = {
             isPlaying: false,
             width: 108,
             height: 108,
+            hasCoin: false,
         },
     ],
     score: 0,
