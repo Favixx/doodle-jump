@@ -80,7 +80,7 @@ const Game: React.FC = () => {
                 options={{ backgroundColor: 0x000000, backgroundAlpha: 0 }}
             >
                 {
-                    state.platforms.map((platform: Platform) => {
+                    !state.gameOver && state.platforms.map((platform: Platform) => {
                         const adjustedX = Math.max(
                             platform.width / 2,
                             Math.min(window.innerWidth - platform.width / 2, platform.x)
