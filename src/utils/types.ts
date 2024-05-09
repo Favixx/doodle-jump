@@ -1,3 +1,5 @@
+import { WebSocket } from "ws";
+
 export interface Dimensions {
     width: number;
     height: number;
@@ -34,6 +36,8 @@ export interface GameState {
     gameOver: boolean;
     cameraLift: number;
     wishPlayerX: number | null;
+    websocket: WebSocket | null;
+    // lastFrameTime: number;
 }
 
 export interface OptionsModalProps {

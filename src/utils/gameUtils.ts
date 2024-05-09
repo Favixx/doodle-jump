@@ -37,6 +37,7 @@ export const lerp = (a: number, b: number, n: number) => {
     return (1 - n) * a + n * b;
 }
 
+
 export const animate = (state: GameState, dispatch: Dispatch<Action>) => {
     if (state.platforms.length < 15) {
         addPlatform(dispatch);
@@ -57,7 +58,7 @@ export const animate = (state: GameState, dispatch: Dispatch<Action>) => {
                 cameraLift: state.cameraLift + cameraLiftAdjustment,
                 platforms: state.platforms.map((platform: Platform) => ({
                     ...platform,
-                    y: platform.y + cameraLiftAdjustment,
+                    // y: platform.y + cameraLiftAdjustment,
                 })),
             },
         });

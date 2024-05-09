@@ -37,4 +37,6 @@ export const INITIAL_STATE: GameState = {
     gameOver: false,
     cameraLift: 0,
     wishPlayerX: null,
+    websocket: null,
+    // lastFrameTime: 0,
 };
