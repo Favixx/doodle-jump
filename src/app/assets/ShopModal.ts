@@ -67,19 +67,25 @@ export const SkinList = styled.div`
   padding-bottom: 102px;
 `;
 
-export const Comm = styled.div`
+export const Comm = styled.button`
+  background: transparent;
   background-image: url('./Shop/320/320IconComm.png');
   background-repeat: no-repeat;
   width: 144px;
   height: 160px;
+  border: none;
 `;
-export const Rare = styled.div`
+export const Rare = styled.button`
+  background: transparent;
+  border: none;
   background-image: url('./Shop/320/320IconRare.png');
   background-repeat: no-repeat;
   width: 144px;
   height: 160px;
 `;
-export const Leg = styled.div`
+export const Leg = styled.button`
+  background: transparent;
+  border: none;
   background-image: url('./Shop/320/320IconLeg.png');
   background-repeat: no-repeat;
   width: 144px;
