@@ -14,17 +14,18 @@ export default function Home() {
     useViewportHeight();
 
     useEffect(() => {
-        const isUsingMobile = () => {
+        const load = () => {
             setIsInitialized(true);
         };
 
-        isUsingMobile();
+        load();
 
-        window.addEventListener('resize', isUsingMobile);
+        //!why do you need this?
+        // window.addEventListener('resize', load);
 
-        return () => {
-            window.removeEventListener('resize', isUsingMobile);
-        };
+        // return () => {
+        //     window.removeEventListener('resize', load);
+        // };
     }, []);
 
     if (!isInitialized) {

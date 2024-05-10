@@ -30,6 +30,7 @@ export default function reducer(state: GameState, action: any): GameState {
                 isPlaying: false,
                 width: PLATFORM_WIDTH,
                 height: PLATFORM_HEIGHT,
+                hasCoin: Math.random() > 0.8
             };
             return { ...state, platforms: [...state.platforms, newPlatform] };
         case 'startExplosion':

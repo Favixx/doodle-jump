@@ -8,6 +8,7 @@ import { useGameReducer } from '@/hooks/useGameReducer';
 import { handleTouch } from '@/utils/gameControls';
 import {
     BUBBLE_FRAMES,
+    COINBUBBLE_FRAMES,
     PLATFORM_HEIGHT,
     PLATFORM_WIDTH,
     PLAYER_HEIGHT,
@@ -78,8 +79,8 @@ const Game: React.FC = () => {
                 height={state.dimensions.height}
                 options={{ backgroundColor: 0x000000, backgroundAlpha: 0 }}
             >
-                {!state.gameOver &&
-                    state.platforms.map((platform: Platform) => {
+                {
+                    !state.gameOver && state.platforms.map((platform: Platform) => {
                         const adjustedX = Math.max(
                             platform.width / 2,
                             Math.min(window.innerWidth - platform.width / 2, platform.x)
@@ -92,8 +93,8 @@ const Game: React.FC = () => {
                                 isPlaying={platform.isPlaying}
                                 x={adjustedX}
                                 y={adjustedY}
-                                images={BUBBLE_FRAMES}
-                                animationSpeed={0.45}
+                                images={platform.hasCoin ? COINBUBBLE_FRAMES : BUBBLE_FRAMES}
+                                animationSpeed={0.40}
                                 loop={false}
                                 onComplete={() => onCompleteRemovePlatform(platform.id)}
                                 width={PLATFORM_WIDTH}
@@ -106,7 +107,8 @@ const Game: React.FC = () => {
                                 anchor={0.5}
                             />
                         );
-                    })}
+                    })
+                }
 
                 {!state.gameOver && (
                     <Sprite

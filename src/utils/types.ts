@@ -1,4 +1,5 @@
 import { StaticImageData } from 'next/image';
+import { WebSocket } from 'ws';
 
 export interface Dimensions {
   width: number;
@@ -12,6 +13,7 @@ export interface Platform {
   width: number;
   height: number;
   isPlaying: boolean;
+  hasCoin: boolean;
 }
 
 export type Action =
@@ -36,6 +38,8 @@ export interface GameState {
   gameOver: boolean;
   cameraLift: number;
   wishPlayerX: number | null;
+  websocket: WebSocket | null;
+  // lastFrameTime: number;
 }
 
 export interface Skin {
